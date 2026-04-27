@@ -1,0 +1,10 @@
+<api type="debug" assembly-name="RemindMe" mvid="70131b72436a422eae73afc39152724a">
+  <java-to-managed>
+    <entry java-name="crc64e233efd426f63c45/MainActivity" managed-name="RemindMe.MainActivity, RemindMe" managed-type-token-id="33554441" />
+    <entry java-name="crc64e233efd426f63c45/MainApplication" managed-name="RemindMe.MainApplication, RemindMe" managed-type-token-id="33554442" />
+  </java-to-managed>
+  <managed-to-java>
+    <entry java-name="crc64e233efd426f63c45/MainActivity" managed-name="RemindMe.MainActivity, RemindMe" managed-type-token-id="33554441" />
+    <entry java-name="crc64e233efd426f63c45/MainApplication" managed-name="RemindMe.MainApplication, RemindMe" managed-type-token-id="33554442" />
+  </managed-to-java>
+</api>
