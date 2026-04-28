@@ -7,11 +7,11 @@
              BackgroundColor="#0B2B14">
 
         <Grid RowDefinitions="Auto,*"
-                        RowSpacing="20"
-                        Padding="20">
+              RowSpacing="20"
+              Padding="20">
                 <!-- Fixed Header Section (not scrolling) -->
                 <VerticalStackLayout Grid.Row="0"
-                                Spacing="20">
+                                     Spacing="20">
                         <Label Text="RemindMe"
                                FontSize="32"
                                FontAttributes="Bold"
@@ -102,21 +102,89 @@
                                                 </Border.StrokeShape>
                                                 <Border.GestureRecognizers>
                                                         <TapGestureRecognizer Tapped="OnReminderCardTapped"
-                                                                        CommandParameter="{Binding .}"/>
+                                                                              CommandParameter="{Binding .}"/>
                                                 </Border.GestureRecognizers>
+                                                <Border.Triggers>
+                                                        <DataTrigger TargetType="Border"
+                                                                     Binding="{Binding IsCompleted}"
+                                                                     Value="True">
+                                                                <Setter Property="BackgroundColor"
+                                                                        Value="#ECECEC"/>
+                                                                <Setter Property="Opacity"
+                                                                        Value="0.9"/>
+                                                        </DataTrigger>
+                                                </Border.Triggers>
 
-                                                <VerticalStackLayout Spacing="8">
-                                                        <Label Text="{Binding Title}"
-                                                               FontSize="20"
-                                                               FontAttributes="Bold"
-                                                               TextColor="#0B2B14"/>
-                                                        <Label Text="{Binding Description}"
-                                                               FontSize="14"
-                                                               TextColor="#2E3F34"/>
-                                                        <Label Text="{Binding ReminderTime, StringFormat='{}{0:MMM d, h:mm tt}'}"
-                                                               FontSize="13"
-                                                               TextColor="#5F6E63"/>
-                                                </VerticalStackLayout>
+                                                <Grid ColumnDefinitions="*,Auto"
+                                                      ColumnSpacing="16">
+                                                        <VerticalStackLayout Spacing="8"
+                                                                             Grid.Column="0">
+                                                                <Label Text="{Binding Title}"
+                                                                       FontSize="20"
+                                                                       FontAttributes="Bold"
+                                                                       TextColor="#0B2B14">
+                                                                        <Label.Triggers>
+                                                                                <DataTrigger TargetType="Label"
+                                                                                             Binding="{Binding IsCompleted}"
+                                                                                             Value="True">
+                                                                                        <Setter Property="TextDecorations"
+                                                                                                Value="Strikethrough"/>
+                                                                                        <Setter Property="TextColor"
+                                                                                                Value="#6F6F6F"/>
+                                                                                </DataTrigger>
+                                                                        </Label.Triggers>
+                                                                </Label>
+                                                                <Label Text="{Binding Description}"
+                                                                       FontSize="14"
+                                                                       TextColor="#2E3F34">
+                                                                        <Label.Triggers>
+                                                                                <DataTrigger TargetType="Label"
+                                                                                             Binding="{Binding IsCompleted}"
+                                                                                             Value="True">
+                                                                                        <Setter Property="TextDecorations"
+                                                                                                Value="Strikethrough"/>
+                                                                                        <Setter Property="TextColor"
+                                                                                                Value="#7A7A7A"/>
+                                                                                </DataTrigger>
+                                                                        </Label.Triggers>
+                                                                </Label>
+                                                                <Label Text="{Binding ReminderTime, StringFormat='{}{0:MMM d, h:mm tt}'}"
+                                                                       FontSize="13"
+                                                                       TextColor="#5F6E63">
+                                                                        <Label.Triggers>
+                                                                                <DataTrigger TargetType="Label"
+                                                                                             Binding="{Binding IsCompleted}"
+                                                                                             Value="True">
+                                                                                        <Setter Property="TextDecorations"
+                                                                                                Value="Strikethrough"/>
+                                                                                        <Setter Property="TextColor"
+                                                                                                Value="#7A7A7A"/>
+                                                                                </DataTrigger>
+                                                                        </Label.Triggers>
+                                                                </Label>
+                                                        </VerticalStackLayout>
+
+                                                        <Button Grid.Column="1"
+                                                                WidthRequest="32"
+                                                                HeightRequest="32"
+                                                                CornerRadius="16"
+                                                                BackgroundColor="Transparent"
+                                                                BorderColor="#2E7D32"
+                                                                BorderWidth="1"
+                                                                TextColor="#2E7D32"
+                                                                FontAttributes="Bold"
+                                                                Clicked="OnCompleteTapped"
+                                                                CommandParameter="{Binding .}">
+                                                                <Button.Triggers>
+                                                                        <DataTrigger TargetType="Button"
+                                                                                     Binding="{Binding IsCompleted}"
+                                                                                     Value="True">
+                                                                                <Setter Property="IsVisible"
+                                                                                        Value="False"/>
+                                                                        </DataTrigger>
+                                                                </Button.Triggers>
+                                                        </Button>
+                                                </Grid>
                                         </Border>
                                 </DataTemplate>
                         </CollectionView.ItemTemplate>

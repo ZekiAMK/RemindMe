@@ -1,6 +1,8 @@
-﻿using RemindMe.Models;
+﻿using Microsoft.Maui.Graphics;
+using RemindMe.Models;
 using RemindMe.Pages;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RemindMe;
 
@@ -72,13 +74,14 @@ public partial class MainPage : ContentPage
         {
             case "All":
                 Reminders = AllReminders
-                    .Where(r => r.HasAlert)
+                    .Where(r => r.HasAlert && !r.IsCompleted)
                     .OrderBy(r => r.ReminderTime)
                     .ToList();
                 break;
             case "Today":
                 Reminders = AllReminders
                     .Where(r => r.HasAlert &&
+                                !r.IsCompleted &&
                                 r.ReminderTime.HasValue &&
                                 r.ReminderTime.Value.Date == DateTime.Today)
                     .OrderBy(r => r.ReminderTime)
@@ -86,13 +89,13 @@ public partial class MainPage : ContentPage
                 break;
             case "No Alert":
                 Reminders = AllReminders
-                    .Where(r => !r.HasAlert)
+                    .Where(r => !r.HasAlert && !r.IsCompleted)
                     .OrderBy(r => r.Title)
                     .ToList();
                 break;
             case "Important":
                 Reminders = AllReminders
-                    .Where(r => r.IsImportant)
+                    .Where(r => r.IsImportant && !r.IsCompleted)
                     .OrderBy(r => r.ReminderTime)
                     .ToList();
                 break;
@@ -150,6 +153,27 @@ public partial class MainPage : ContentPage
             };
 
             await Navigation.PushAsync(new AddReminderPage(reminder));
+        }
+    }
+
+    private async void OnCompleteTapped(object? sender, EventArgs e)
+    {
+        if (sender is Button button && button.CommandParameter is ReminderItem reminder)
+        {
+            button.Text = "✓";
+            button.BackgroundColor = Color.FromArgb("#2E7D32");
+            button.TextColor = Colors.White;
+            button.BorderColor = Colors.Transparent;
+            button.IsEnabled = false;
+
+            if (button.Parent is Grid grid && grid.Parent is Border card)
+            {
+                await card.FadeToAsync(0, 300);
+            }
+
+            reminder.IsCompleted = true;
+            await Task.Delay(300);
+            ApplyFilter(_activeFilter);
         }
     }
 }

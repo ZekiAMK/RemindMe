@@ -28,11 +28,39 @@ public partial class AddReminderPage : ContentPage
     private void PreFillForm()
     {
         if (_reminderToEdit == null)
+        {
+            // Add mode: Show Save and Cancel
+            SaveAction.IsVisible = true;
+            RestoreAction.IsVisible = false;
+            DeleteAction.IsVisible = false;
+            CancelAction.IsVisible = true;
             return;
+        }
 
         // Update page title
         PageTitle.Text = "Edit Reminder";
-        DeleteButton.IsVisible = true;
+
+        if (_reminderToEdit.IsCompleted)
+        {
+            // Completed edit mode: Show Restore, Delete, Cancel
+            SaveAction.IsVisible = false;
+            RestoreAction.IsVisible = true;
+            DeleteAction.IsVisible = true;
+            CancelAction.IsVisible = true;
+        }
+        else
+        {
+            // Active edit mode: Show Save, Delete, Cancel
+            SaveAction.IsVisible = true;
+            RestoreAction.IsVisible = false;
+            DeleteAction.IsVisible = true;
+            CancelAction.IsVisible = true;
+        }
+
+        ImportantRow.IsVisible = !_reminderToEdit.IsCompleted;
+        SetAlertRow.IsVisible = !_reminderToEdit.IsCompleted;
+        DateRow.IsVisible = _reminderToEdit.HasAlert && !_reminderToEdit.IsCompleted;
+        TimeRow.IsVisible = _reminderToEdit.HasAlert && !_reminderToEdit.IsCompleted;
 
         // Pre-fill the fields
         TitleEntry.Text = _reminderToEdit.Title;
@@ -63,6 +91,16 @@ public partial class AddReminderPage : ContentPage
             return;
 
         OnReminderDeleted?.Invoke(_reminderToEdit);
+        await Navigation.PopAsync();
+    }
+
+    private async void OnRestoreClicked(object? sender, EventArgs e)
+    {
+        if (_reminderToEdit == null)
+            return;
+
+        _reminderToEdit.IsCompleted = false;
+        OnReminderAdded?.Invoke(_reminderToEdit);
         await Navigation.PopAsync();
     }
 
