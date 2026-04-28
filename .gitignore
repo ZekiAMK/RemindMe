@@ -1,0 +1,19 @@
+# Build outputs
+bin/
+obj/
+
+# Visual Studio / VS Code
+.vs/
+*.user
+*.suo
+
+# MAUI / .NET
+*.dll
+*.exe
+*.pdb
+*.apk
+*.aab
+
+# Others
+*.log
+*.tmp
