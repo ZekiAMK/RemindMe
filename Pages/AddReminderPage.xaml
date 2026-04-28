@@ -9,7 +9,8 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Label Text="Add Reminder"
+            <Label x:Name="PageTitle"
+                   Text="Add Reminder"
                    FontSize="28"
                    FontAttributes="Bold"
                    TextColor="White"
@@ -88,6 +89,15 @@
                         TextColor="White"
                         CornerRadius="20"
                         Padding="24,12" />
+
+                <Button x:Name="DeleteButton"
+                        Text="Delete"
+                        Clicked="OnDeleteClicked"
+                        BackgroundColor="#B71C1C"
+                        TextColor="White"
+                        CornerRadius="20"
+                        Padding="24,12"
+                        IsVisible="False" />
 
                 <Button Text="Cancel"
                         Clicked="OnCancelClicked"

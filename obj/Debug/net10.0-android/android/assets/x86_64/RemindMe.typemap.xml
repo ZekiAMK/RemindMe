@@ -1,4 +1,4 @@
-<api type="debug" assembly-name="RemindMe" mvid="70131b72436a422eae73afc39152724a">
+<api type="debug" assembly-name="RemindMe" mvid="530a090c6e224f739b8cafe69e4e58a5">
   <java-to-managed>
     <entry java-name="crc64e233efd426f63c45/MainActivity" managed-name="RemindMe.MainActivity, RemindMe" managed-type-token-id="33554441" />
     <entry java-name="crc64e233efd426f63c45/MainApplication" managed-name="RemindMe.MainApplication, RemindMe" managed-type-token-id="33554442" />

@@ -8,6 +8,7 @@ public partial class MainPage : ContentPage
 {
     private List<ReminderItem> AllReminders { get; set; }
     public List<ReminderItem> Reminders { get; set; }
+    private string _activeFilter = "All";
 
     public MainPage()
     {
@@ -19,9 +20,7 @@ public partial class MainPage : ContentPage
             new ReminderItem { Title = "Study", Description = "Algorithms", ReminderTime = DateTime.Now.AddHours(4), IsCompleted = false, HasAlert = true }
         };
 
-        Reminders = AllReminders.Where(r => r.HasAlert).ToList();
-
-        RefreshBinding();
+        ApplyFilter(_activeFilter);
     }
 
     private async void OnAddReminderClicked(object? sender, EventArgs e)
@@ -29,13 +28,7 @@ public partial class MainPage : ContentPage
         AddReminderPage.OnReminderAdded = (reminder) =>
         {
             AllReminders.Add(reminder);
-
-            if (reminder.HasAlert)
-                Reminders = AllReminders.Where(r => r.HasAlert).ToList();
-            else
-                Reminders = AllReminders.Where(r => !r.HasAlert).ToList();
-
-            RefreshBinding();
+            ApplyFilter(_activeFilter);
         };
 
         await Navigation.PushAsync(new AddReminderPage());
@@ -43,47 +36,88 @@ public partial class MainPage : ContentPage
 
     private void OnAllClicked(object? sender, EventArgs e)
     {
-        Reminders = AllReminders.Where(r => r.HasAlert).ToList();
-        RefreshBinding();
+        ApplyFilter("All");
     }
 
     private void OnTodayClicked(object? sender, EventArgs e)
     {
-        Reminders = AllReminders
-            .Where(r => r.HasAlert &&
-                        r.ReminderTime.HasValue &&
-                        r.ReminderTime.Value.Date == DateTime.Today)
-            .ToList();
-
-        RefreshBinding();
+        ApplyFilter("Today");
     }
 
     private void OnNoAlertClicked(object? sender, EventArgs e)
     {
-        Reminders = AllReminders.Where(r => !r.HasAlert).ToList();
-        RefreshBinding();
+        ApplyFilter("No Alert");
     }
 
     private void OnImportantClicked(object? sender, EventArgs e)
     {
-        Reminders = AllReminders.Where(r => r.IsImportant).ToList();
-        RefreshBinding();
+        ApplyFilter("Important");
     }
 
     private void OnCompletedClicked(object? sender, EventArgs e)
     {
-        Reminders = AllReminders.Where(r => r.IsCompleted).ToList();
-        RefreshBinding();
+        ApplyFilter("Completed");
     }
 
     private void OnPastClicked(object? sender, EventArgs e)
     {
-        Reminders = AllReminders
-            .Where(r => r.HasAlert &&
-                        !r.IsCompleted &&
-                        r.ReminderTime.HasValue &&
-                        r.ReminderTime.Value < DateTime.Now)
-            .ToList();
+        ApplyFilter("Past");
+    }
+
+    private void ApplyFilter(string filter)
+    {
+        _activeFilter = filter;
+
+        switch (filter)
+        {
+            case "All":
+                Reminders = AllReminders
+                    .Where(r => r.HasAlert)
+                    .OrderBy(r => r.ReminderTime)
+                    .ToList();
+                break;
+            case "Today":
+                Reminders = AllReminders
+                    .Where(r => r.HasAlert &&
+                                r.ReminderTime.HasValue &&
+                                r.ReminderTime.Value.Date == DateTime.Today)
+                    .OrderBy(r => r.ReminderTime)
+                    .ToList();
+                break;
+            case "No Alert":
+                Reminders = AllReminders
+                    .Where(r => !r.HasAlert)
+                    .OrderBy(r => r.Title)
+                    .ToList();
+                break;
+            case "Important":
+                Reminders = AllReminders
+                    .Where(r => r.IsImportant)
+                    .OrderBy(r => r.ReminderTime)
+                    .ToList();
+                break;
+            case "Completed":
+                Reminders = AllReminders
+                    .Where(r => r.IsCompleted)
+                    .OrderBy(r => r.ReminderTime)
+                    .ToList();
+                break;
+            case "Past":
+                Reminders = AllReminders
+                    .Where(r => r.HasAlert &&
+                                !r.IsCompleted &&
+                                r.ReminderTime.HasValue &&
+                                r.ReminderTime.Value < DateTime.Now)
+                    .OrderBy(r => r.ReminderTime)
+                    .ToList();
+                break;
+            default:
+                Reminders = AllReminders
+                    .Where(r => r.HasAlert)
+                    .OrderBy(r => r.ReminderTime)
+                    .ToList();
+                break;
+        }
 
         RefreshBinding();
     }
@@ -92,5 +126,30 @@ public partial class MainPage : ContentPage
     {
         BindingContext = null;
         BindingContext = this;
+    }
+
+    private async void OnReminderCardTapped(object? sender, TappedEventArgs e)
+    {
+        if (e.Parameter is ReminderItem reminder)
+        {
+            AddReminderPage.OnReminderAdded = (updatedReminder) =>
+            {
+                int index = AllReminders.IndexOf(reminder);
+                if (index >= 0)
+                {
+                    AllReminders[index] = updatedReminder;
+                }
+
+                ApplyFilter(_activeFilter);
+            };
+
+            AddReminderPage.OnReminderDeleted = (deletedReminder) =>
+            {
+                AllReminders.Remove(deletedReminder);
+                ApplyFilter(_activeFilter);
+            };
+
+            await Navigation.PushAsync(new AddReminderPage(reminder));
+        }
     }
 }

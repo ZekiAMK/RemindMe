@@ -6,110 +6,120 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#0B2B14">
 
-    <VerticalStackLayout Padding="20"
-                         Spacing="20">
+        <Grid RowDefinitions="Auto,*"
+                        RowSpacing="20"
+                        Padding="20">
+                <!-- Fixed Header Section (not scrolling) -->
+                <VerticalStackLayout Grid.Row="0"
+                                Spacing="20">
+                        <Label Text="RemindMe"
+                               FontSize="32"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
 
-        <Label Text="RemindMe"
-               FontSize="32"
-               FontAttributes="Bold"
-               TextColor="White"
-               HorizontalOptions="Center"
-               VerticalOptions="Center"/>
+                        <Label Text="Your daily reminders"
+                               FontSize="16"
+                               TextColor="#DCECCF"
+                               HorizontalOptions="Center"/>
 
-        <Label Text="Your daily reminders"
-               FontSize="16"
-               TextColor="#DCECCF"
-               HorizontalOptions="Center"/>
+                        <Button Text="+ Add Reminder"
+                                Clicked="OnAddReminderClicked"
+                                BackgroundColor="#2E7D32"
+                                TextColor="White"
+                                CornerRadius="26"
+                                WidthRequest="220"
+                                HeightRequest="52"
+                                FontSize="16"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"/>
 
-        <Button Text="+ Add Reminder"
-                Clicked="OnAddReminderClicked"
-                BackgroundColor="#2E7D32"
-                TextColor="White"
-                CornerRadius="26"
-                WidthRequest="220"
-                HeightRequest="52"
-                FontSize="16"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"/>
+                        <ScrollView Orientation="Horizontal"
+                                    HorizontalScrollBarVisibility="Never">
+                                <HorizontalStackLayout Spacing="12">
+                                        <Button Text="All"
+                                                Clicked="OnAllClicked"
+                                                BackgroundColor="#214B27"
+                                                TextColor="White"
+                                                CornerRadius="20"
+                                                Padding="18,10"
+                                                FontSize="14"/>
+                                        <Button Text="Today"
+                                                Clicked="OnTodayClicked"
+                                                BackgroundColor="#214B27"
+                                                TextColor="White"
+                                                CornerRadius="20"
+                                                Padding="18,10"
+                                                FontSize="14"/>
+                                        <Button Text="Important"
+                                                Clicked="OnImportantClicked"
+                                                BackgroundColor="#214B27"
+                                                TextColor="White"
+                                                CornerRadius="20"
+                                                Padding="18,10"
+                                                FontSize="14"/>
+                                        <Button Text="No Alert"
+                                                Clicked="OnNoAlertClicked"
+                                                BackgroundColor="#214B27"
+                                                TextColor="White"
+                                                CornerRadius="20"
+                                                Padding="18,10"
+                                                FontSize="14"/>
+                                        <Button Text="Completed"
+                                                Clicked="OnCompletedClicked"
+                                                BackgroundColor="#214B27"
+                                                TextColor="White"
+                                                CornerRadius="20"
+                                                Padding="18,10"
+                                                FontSize="14"/>
+                                        <Button Text="Past"
+                                                Clicked="OnPastClicked"
+                                                BackgroundColor="#214B27"
+                                                TextColor="White"
+                                                CornerRadius="20"
+                                                Padding="18,10"
+                                                FontSize="14"/>
+                                </HorizontalStackLayout>
+                        </ScrollView>
+                </VerticalStackLayout>
 
-        <ScrollView Orientation="Horizontal"
-                    HorizontalScrollBarVisibility="Never">
-            <HorizontalStackLayout Spacing="12">
-                <Button Text="All"
-                        Clicked="OnAllClicked"
-                        BackgroundColor="#214B27"
-                        TextColor="White"
-                        CornerRadius="20"
-                        Padding="18,10"
-                        FontSize="14"/>
-                <Button Text="Today"
-                        Clicked="OnTodayClicked"
-                        BackgroundColor="#214B27"
-                        TextColor="White"
-                        CornerRadius="20"
-                        Padding="18,10"
-                        FontSize="14"/>
-                <Button Text="Important"
-                        Clicked="OnImportantClicked"
-                        BackgroundColor="#214B27"
-                        TextColor="White"
-                        CornerRadius="20"
-                        Padding="18,10"
-                        FontSize="14"/>
-                <Button Text="No Alert"
-                        Clicked="OnNoAlertClicked"
-                        BackgroundColor="#214B27"
-                        TextColor="White"
-                        CornerRadius="20"
-                        Padding="18,10"
-                        FontSize="14"/>
-                <Button Text="Completed"
-                        Clicked="OnCompletedClicked"
-                        BackgroundColor="#214B27"
-                        TextColor="White"
-                        CornerRadius="20"
-                        Padding="18,10"
-                        FontSize="14"/>
-                <Button Text="Past"
-                        Clicked="OnPastClicked"
-                        BackgroundColor="#214B27"
-                        TextColor="White"
-                        CornerRadius="20"
-                        Padding="18,10"
-                        FontSize="14"/>
-            </HorizontalStackLayout>
-        </ScrollView>
+                <!-- Scrolling List Section -->
+                <CollectionView Grid.Row="1"
+                                ItemsSource="{Binding Reminders}"
+                                VerticalOptions="FillAndExpand"
+                                SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                        <Border Margin="0,0,0,16"
+                                                Padding="18"
+                                                Stroke="#2E7D32"
+                                                StrokeThickness="1"
+                                                BackgroundColor="White"
+                                                x:Name="ReminderCard">
+                                                <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="20"/>
+                                                </Border.StrokeShape>
+                                                <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnReminderCardTapped"
+                                                                        CommandParameter="{Binding .}"/>
+                                                </Border.GestureRecognizers>
 
-        <CollectionView ItemsSource="{Binding Reminders}"
-                        VerticalOptions="FillAndExpand"
-                        SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border Margin="0,0,0,16"
-                            Padding="18"
-                            Stroke="#2E7D32"
-                            StrokeThickness="1"
-                            BackgroundColor="White">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20"/>
-                        </Border.StrokeShape>
-
-                        <VerticalStackLayout Spacing="8">
-                            <Label Text="{Binding Title}"
-                                   FontSize="20"
-                                   FontAttributes="Bold"
-                                   TextColor="#0B2B14"/>
-                            <Label Text="{Binding Description}"
-                                   FontSize="14"
-                                   TextColor="#2E3F34"/>
-                            <Label Text="{Binding ReminderTime, StringFormat='{}{0:MMM d, h:mm tt}'}"
-                                   FontSize="13"
-                                   TextColor="#5F6E63"/>
-                        </VerticalStackLayout>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-    </VerticalStackLayout>
+                                                <VerticalStackLayout Spacing="8">
+                                                        <Label Text="{Binding Title}"
+                                                               FontSize="20"
+                                                               FontAttributes="Bold"
+                                                               TextColor="#0B2B14"/>
+                                                        <Label Text="{Binding Description}"
+                                                               FontSize="14"
+                                                               TextColor="#2E3F34"/>
+                                                        <Label Text="{Binding ReminderTime, StringFormat='{}{0:MMM d, h:mm tt}'}"
+                                                               FontSize="13"
+                                                               TextColor="#5F6E63"/>
+                                                </VerticalStackLayout>
+                                        </Border>
+                                </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                </CollectionView>
+        </Grid>
 </ContentPage>
