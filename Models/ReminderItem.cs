@@ -8,4 +8,5 @@ public class ReminderItem
     public bool IsCompleted { get; set; }
     public bool IsImportant { get; set; }
     public bool HasAlert { get; set; }
+    public bool IsSelected { get; set; }
 }

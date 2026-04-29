@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RemindMe.MainPage"
+             x:Name="MainPageRoot"
              NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="False"
              BackgroundColor="#0B2B14">
@@ -9,15 +10,15 @@
         <Grid RowDefinitions="Auto,*"
               RowSpacing="20"
               Padding="20">
-                <!-- Fixed Header Section (not scrolling) -->
+
                 <VerticalStackLayout Grid.Row="0"
                                      Spacing="20">
+
                         <Label Text="RemindMe"
                                FontSize="32"
                                FontAttributes="Bold"
                                TextColor="White"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center"/>
+                               HorizontalOptions="Center"/>
 
                         <Label Text="Your daily reminders"
                                FontSize="16"
@@ -32,8 +33,7 @@
                                 WidthRequest="220"
                                 HeightRequest="52"
                                 FontSize="16"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center"/>
+                                HorizontalOptions="Center"/>
 
                         <ScrollView Orientation="Horizontal"
                                     HorizontalScrollBarVisibility="Never">
@@ -82,29 +82,84 @@
                                                 FontSize="14"/>
                                 </HorizontalStackLayout>
                         </ScrollView>
+
+                        <Border IsVisible="{Binding IsSelectionMode}"
+                                BackgroundColor="#163D1D"
+                                Stroke="#2E7D32"
+                                StrokeThickness="1"
+                                Padding="14"
+                                Margin="0,-8,0,0">
+                                <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18"/>
+                                </Border.StrokeShape>
+
+                                <Grid ColumnDefinitions="*,Auto,Auto,Auto"
+                                                ColumnSpacing="10">
+                                        <Label Text="{Binding SelectedCount, StringFormat='{}{0} selected'}"
+                                               TextColor="White"
+                                               FontSize="15"
+                                               VerticalOptions="Center"/>
+
+                                        <Button Grid.Column="1"
+                                                Text="Complete"
+                                                Clicked="OnCompleteSelectedClicked"
+                                                BackgroundColor="#2E7D32"
+                                                TextColor="White"
+                                                CornerRadius="16"
+                                                Padding="12,8"/>
+
+                                        <Button Grid.Column="2"
+                                                Text="Delete"
+                                                Clicked="OnDeleteSelectedClicked"
+                                                BackgroundColor="#B71C1C"
+                                                TextColor="White"
+                                                CornerRadius="16"
+                                                Padding="12,8"/>
+
+                                        <Button Grid.Column="3"
+                                                Text="Cancel"
+                                                Clicked="OnCancelSelectionClicked"
+                                                BackgroundColor="Gray"
+                                                TextColor="White"
+                                                CornerRadius="16"
+                                                Padding="12,8"/>
+                                </Grid>
+                        </Border>
+
                 </VerticalStackLayout>
 
-                <!-- Scrolling List Section -->
                 <CollectionView Grid.Row="1"
                                 ItemsSource="{Binding Reminders}"
                                 VerticalOptions="FillAndExpand"
                                 SelectionMode="None">
+
                         <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                         <Border Margin="0,0,0,16"
                                                 Padding="18"
                                                 Stroke="#2E7D32"
                                                 StrokeThickness="1"
-                                                BackgroundColor="White"
-                                                x:Name="ReminderCard">
+                                                BackgroundColor="White">
+
                                                 <Border.StrokeShape>
                                                         <RoundRectangle CornerRadius="20"/>
                                                 </Border.StrokeShape>
+
                                                 <Border.GestureRecognizers>
                                                         <TapGestureRecognizer Tapped="OnReminderCardTapped"
                                                                               CommandParameter="{Binding .}"/>
                                                 </Border.GestureRecognizers>
+
                                                 <Border.Triggers>
+                                                        <DataTrigger TargetType="Border"
+                                                                     Binding="{Binding IsSelected}"
+                                                                     Value="True">
+                                                                <Setter Property="BackgroundColor"
+                                                                        Value="#DFF3E2"/>
+                                                                <Setter Property="StrokeThickness"
+                                                                        Value="3"/>
+                                                        </DataTrigger>
+
                                                         <DataTrigger TargetType="Border"
                                                                      Binding="{Binding IsCompleted}"
                                                                      Value="True">
@@ -117,8 +172,10 @@
 
                                                 <Grid ColumnDefinitions="*,Auto"
                                                       ColumnSpacing="16">
-                                                        <VerticalStackLayout Spacing="8"
-                                                                             Grid.Column="0">
+
+                                                        <VerticalStackLayout Grid.Column="0"
+                                                                             Spacing="8">
+
                                                                 <Label Text="{Binding Title}"
                                                                        FontSize="20"
                                                                        FontAttributes="Bold"
@@ -134,6 +191,7 @@
                                                                                 </DataTrigger>
                                                                         </Label.Triggers>
                                                                 </Label>
+
                                                                 <Label Text="{Binding Description}"
                                                                        FontSize="14"
                                                                        TextColor="#2E3F34">
@@ -148,6 +206,7 @@
                                                                                 </DataTrigger>
                                                                         </Label.Triggers>
                                                                 </Label>
+
                                                                 <Label Text="{Binding ReminderTime, StringFormat='{}{0:MMM d, h:mm tt}'}"
                                                                        FontSize="13"
                                                                        TextColor="#5F6E63">
@@ -164,30 +223,50 @@
                                                                 </Label>
                                                         </VerticalStackLayout>
 
-                                                        <Button Grid.Column="1"
-                                                                WidthRequest="32"
-                                                                HeightRequest="32"
-                                                                CornerRadius="16"
-                                                                BackgroundColor="Transparent"
-                                                                BorderColor="#2E7D32"
-                                                                BorderWidth="1"
-                                                                TextColor="#2E7D32"
-                                                                FontAttributes="Bold"
-                                                                Clicked="OnCompleteTapped"
-                                                                CommandParameter="{Binding .}">
-                                                                <Button.Triggers>
-                                                                        <DataTrigger TargetType="Button"
-                                                                                     Binding="{Binding IsCompleted}"
-                                                                                     Value="True">
-                                                                                <Setter Property="IsVisible"
-                                                                                        Value="False"/>
-                                                                        </DataTrigger>
-                                                                </Button.Triggers>
-                                                        </Button>
+                                                        <VerticalStackLayout Grid.Column="1"
+                                                                             Spacing="12"
+                                                                             VerticalOptions="Center">
+
+                                                                <Button Text="⋯"
+                                                                        Clicked="OnSelectModeClicked"
+                                                                        CommandParameter="{Binding .}"
+                                                                        WidthRequest="34"
+                                                                        HeightRequest="34"
+                                                                        CornerRadius="17"
+                                                                        BackgroundColor="Transparent"
+                                                                        BorderColor="#2E7D32"
+                                                                        BorderWidth="1"
+                                                                        TextColor="#2E7D32"
+                                                                        FontSize="18"/>
+
+                                                                <Button WidthRequest="34"
+                                                                        HeightRequest="34"
+                                                                        CornerRadius="17"
+                                                                        BackgroundColor="Transparent"
+                                                                        BorderColor="#2E7D32"
+                                                                        BorderWidth="1"
+                                                                        TextColor="#2E7D32"
+                                                                        FontAttributes="Bold"
+                                                                        Clicked="OnCompleteTapped"
+                                                                        CommandParameter="{Binding .}">
+
+                                                                        <Button.Triggers>
+                                                                                <DataTrigger TargetType="Button"
+                                                                                             Binding="{Binding IsCompleted}"
+                                                                                             Value="True">
+                                                                                        <Setter Property="IsVisible"
+                                                                                                Value="False"/>
+                                                                                </DataTrigger>
+                                                                        </Button.Triggers>
+                                                                </Button>
+
+                                                        </VerticalStackLayout>
+
                                                 </Grid>
                                         </Border>
                                 </DataTemplate>
                         </CollectionView.ItemTemplate>
                 </CollectionView>
+
         </Grid>
 </ContentPage>
