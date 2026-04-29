@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="RemindMe.MainPage"
              x:Name="MainPageRoot"
              NavigationPage.HasNavigationBar="False"
@@ -94,16 +95,16 @@
                                 </Border.StrokeShape>
 
                                 <Grid ColumnDefinitions="*,Auto,Auto,Auto"
-                                                ColumnSpacing="10">
+                                      ColumnSpacing="10">
                                         <Label Text="{Binding SelectedCount, StringFormat='{}{0} selected'}"
                                                TextColor="White"
                                                FontSize="15"
                                                VerticalOptions="Center"/>
 
                                         <Button Grid.Column="1"
-                                                Text="Complete"
+                                                Text="{Binding SelectionPrimaryActionText}"
                                                 Clicked="OnCompleteSelectedClicked"
-                                                BackgroundColor="#2E7D32"
+                                                BackgroundColor="{Binding SelectionPrimaryActionColor}"
                                                 TextColor="White"
                                                 CornerRadius="16"
                                                 Padding="12,8"/>
@@ -145,11 +146,6 @@
                                                         <RoundRectangle CornerRadius="20"/>
                                                 </Border.StrokeShape>
 
-                                                <Border.GestureRecognizers>
-                                                        <TapGestureRecognizer Tapped="OnReminderCardTapped"
-                                                                              CommandParameter="{Binding .}"/>
-                                                </Border.GestureRecognizers>
-
                                                 <Border.Triggers>
                                                         <DataTrigger TargetType="Border"
                                                                      Binding="{Binding IsSelected}"
@@ -175,6 +171,10 @@
 
                                                         <VerticalStackLayout Grid.Column="0"
                                                                              Spacing="8">
+                                                                <VerticalStackLayout.GestureRecognizers>
+                                                                        <TapGestureRecognizer Tapped="OnReminderCardTapped"
+                                                                                              CommandParameter="{Binding .}"/>
+                                                                </VerticalStackLayout.GestureRecognizers>
 
                                                                 <Label Text="{Binding Title}"
                                                                        FontSize="20"

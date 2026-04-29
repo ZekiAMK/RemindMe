@@ -13,6 +13,14 @@ public partial class MainPage : ContentPage
 
     private string _activeFilter = "All";
 
+    public string SelectionPrimaryActionText =>
+    _activeFilter == "Completed" ? "Restore" : "Complete";
+
+    public Color SelectionPrimaryActionColor =>
+    _activeFilter == "Completed"
+        ? Color.FromArgb("#1976D2") // mavi
+        : Color.FromArgb("#2E7D32"); // yeşil
+
     public bool IsSelectionMode { get; set; }
     public int SelectedCount => AllReminders.Count(r => r.IsSelected);
 
@@ -168,9 +176,12 @@ public partial class MainPage : ContentPage
         if (selected.Count == 0)
             return;
 
+        bool shouldRestore = _activeFilter == "Completed";
+
         foreach (var reminder in selected)
         {
-            reminder.IsCompleted = true;
+            reminder.IsCompleted = !shouldRestore;
+
             reminder.IsSelected = false;
         }
 
