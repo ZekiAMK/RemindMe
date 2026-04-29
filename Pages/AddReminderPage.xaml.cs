@@ -1,5 +1,5 @@
 using RemindMe.Models;
-
+using RemindMe.Services;
 namespace RemindMe.Pages;
 
 public partial class AddReminderPage : ContentPage
@@ -20,7 +20,7 @@ public partial class AddReminderPage : ContentPage
         InitializeComponent();
         NavigationPage.SetHasNavigationBar(this, false);
         _reminderToEdit = reminder;
-        
+
         // Initialize the form after components are created
         this.Loaded += (s, e) => PreFillForm();
     }
@@ -99,8 +99,18 @@ public partial class AddReminderPage : ContentPage
         if (_reminderToEdit == null)
             return;
 
+        if (string.IsNullOrWhiteSpace(TitleEntry.Text))
+        {
+            await DisplayAlertAsync("Title required", "Please enter a reminder title.", "OK");
+            return;
+        }
+
+        _reminderToEdit.Title = TitleEntry.Text.Trim();
+        _reminderToEdit.Description = DescriptionEntry.Text?.Trim() ?? string.Empty;
         _reminderToEdit.IsCompleted = false;
+
         OnReminderAdded?.Invoke(_reminderToEdit);
+
         await Navigation.PopAsync();
     }
 
@@ -149,6 +159,15 @@ public partial class AddReminderPage : ContentPage
         }
 
         OnReminderAdded?.Invoke(reminder);
+
+        if (hasAlert && reminderTime.HasValue)
+        {
+            await NotificationService.ScheduleNotification(
+    reminder.Id,
+    reminder.Title,
+    reminder.Description,
+    reminderTime.Value);
+        }
 
         await Navigation.PopAsync();
     }
