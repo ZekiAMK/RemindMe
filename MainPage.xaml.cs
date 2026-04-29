@@ -1,38 +1,47 @@
 ﻿using Microsoft.Maui.Graphics;
 using RemindMe.Models;
 using RemindMe.Pages;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace RemindMe;
 
 public partial class MainPage : ContentPage
 {
+    private const string StorageKey = "reminders";
+
     private List<ReminderItem> AllReminders { get; set; }
-    public List<ReminderItem> Reminders { get; set; }
+    public List<ReminderItem> Reminders { get; set; } = new();
 
     private string _activeFilter = "All";
 
     public string SelectionPrimaryActionText =>
-    _activeFilter == "Completed" ? "Restore" : "Complete";
+        _activeFilter == "Completed" ? "Restore" : "Complete";
 
     public Color SelectionPrimaryActionColor =>
-    _activeFilter == "Completed"
-        ? Color.FromArgb("#1976D2") // mavi
-        : Color.FromArgb("#2E7D32"); // yeşil
+        _activeFilter == "Completed"
+            ? Color.FromArgb("#1976D2")
+            : Color.FromArgb("#2E7D32");
 
     public bool IsSelectionMode { get; set; }
+
     public int SelectedCount => AllReminders.Count(r => r.IsSelected);
 
     public MainPage()
     {
         InitializeComponent();
 
-        AllReminders = new List<ReminderItem>
+        AllReminders = LoadReminders();
+
+        if (AllReminders.Count == 0)
         {
-            new ReminderItem { Title = "Gym", Description = "Leg day", ReminderTime = DateTime.Now.AddHours(2), IsCompleted = false, HasAlert = true },
-            new ReminderItem { Title = "Study", Description = "Algorithms", ReminderTime = DateTime.Now.AddHours(4), IsCompleted = false, HasAlert = true }
-        };
+            AllReminders = new List<ReminderItem>
+            {
+                new ReminderItem { Title = "Gym", Description = "Leg day", ReminderTime = DateTime.Now.AddHours(2), IsCompleted = false, HasAlert = true },
+                new ReminderItem { Title = "Study", Description = "Algorithms", ReminderTime = DateTime.Now.AddHours(4), IsCompleted = false, HasAlert = true }
+            };
+
+            SaveReminders();
+        }
 
         ApplyFilter(_activeFilter);
     }
@@ -42,6 +51,7 @@ public partial class MainPage : ContentPage
         AddReminderPage.OnReminderAdded = (reminder) =>
         {
             AllReminders.Add(reminder);
+            SaveReminders();
             ApplyFilter(_activeFilter);
         };
 
@@ -112,6 +122,22 @@ public partial class MainPage : ContentPage
         BindingContext = this;
     }
 
+    private void SaveReminders()
+    {
+        var json = JsonSerializer.Serialize(AllReminders);
+        Preferences.Set(StorageKey, json);
+    }
+
+    private List<ReminderItem> LoadReminders()
+    {
+        var json = Preferences.Get(StorageKey, string.Empty);
+
+        if (string.IsNullOrWhiteSpace(json))
+            return new List<ReminderItem>();
+
+        return JsonSerializer.Deserialize<List<ReminderItem>>(json) ?? new List<ReminderItem>();
+    }
+
     private async void OnReminderCardTapped(object? sender, TappedEventArgs e)
     {
         if (e.Parameter is not ReminderItem reminder)
@@ -130,12 +156,14 @@ public partial class MainPage : ContentPage
             if (index >= 0)
                 AllReminders[index] = updatedReminder;
 
+            SaveReminders();
             ApplyFilter(_activeFilter);
         };
 
         AddReminderPage.OnReminderDeleted = (deletedReminder) =>
         {
             AllReminders.Remove(deletedReminder);
+            SaveReminders();
             ApplyFilter(_activeFilter);
         };
 
@@ -160,11 +188,11 @@ public partial class MainPage : ContentPage
         button.IsEnabled = false;
 
         if (button.Parent is Grid grid && grid.Parent is Border card)
-        {
             await card.FadeToAsync(0, 300);
-        }
 
         reminder.IsCompleted = true;
+        SaveReminders();
+
         await Task.Delay(300);
         ApplyFilter(_activeFilter);
     }
@@ -181,10 +209,10 @@ public partial class MainPage : ContentPage
         foreach (var reminder in selected)
         {
             reminder.IsCompleted = !shouldRestore;
-
             reminder.IsSelected = false;
         }
 
+        SaveReminders();
         IsSelectionMode = false;
         ApplyFilter(_activeFilter);
     }
@@ -192,9 +220,7 @@ public partial class MainPage : ContentPage
     private void OnSelectModeClicked(object? sender, EventArgs e)
     {
         if (sender is Button button && button.CommandParameter is ReminderItem reminder)
-        {
             EnterSelectionMode(reminder);
-        }
     }
 
     private void ToggleSelection(ReminderItem reminder)
@@ -242,6 +268,7 @@ public partial class MainPage : ContentPage
         foreach (var reminder in selected)
             AllReminders.Remove(reminder);
 
+        SaveReminders();
         IsSelectionMode = false;
         ApplyFilter(_activeFilter);
     }
