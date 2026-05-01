@@ -3,6 +3,7 @@ using Android.Content;
 using Android.OS;
 using Android.Provider;
 using Microsoft.Maui.ApplicationModel;
+using Android.Util;
 
 namespace RemindMe.Services;
 
@@ -41,6 +42,8 @@ public static class AndroidNotificationService
         }
 
         long triggerTime = new DateTimeOffset(notifyTime).ToUnixTimeMilliseconds();
+
+        Log.Debug("RemindMeAlarm", $"Scheduling alarm. Now={DateTime.Now}, Notify={notifyTime}, Trigger={triggerTime}");
 
         if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
         {

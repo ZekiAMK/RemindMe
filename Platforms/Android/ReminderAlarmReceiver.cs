@@ -1,6 +1,7 @@
 using Android.App;
 using Android.Content;
 using Android.OS;
+using Android.Util;
 
 namespace RemindMe.Services;
 
@@ -11,6 +12,8 @@ public class ReminderAlarmReceiver : BroadcastReceiver
     {
         if (context == null || intent == null)
             return;
+
+        Log.Debug("RemindMeAlarm", "Receiver fired!");
 
         AndroidNotificationService.CreateNotificationChannel(context);
 
@@ -32,7 +35,7 @@ public class ReminderAlarmReceiver : BroadcastReceiver
         var notification = builder
             .SetContentTitle(title)
             .SetContentText(description)
-            .SetSmallIcon(Resource.Mipmap.appicon)
+            .SetSmallIcon(Android.Resource.Drawable.IcDialogInfo)
             .SetAutoCancel(true)
             .Build();
 
