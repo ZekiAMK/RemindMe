@@ -90,6 +90,8 @@ public partial class AddReminderPage : ContentPage
         if (!confirmed)
             return;
 
+        await NotificationService.CancelNotification(_reminderToEdit.Id);
+
         OnReminderDeleted?.Invoke(_reminderToEdit);
         await Navigation.PopAsync();
     }
@@ -108,6 +110,15 @@ public partial class AddReminderPage : ContentPage
         _reminderToEdit.Title = TitleEntry.Text.Trim();
         _reminderToEdit.Description = DescriptionEntry.Text?.Trim() ?? string.Empty;
         _reminderToEdit.IsCompleted = false;
+
+        if (_reminderToEdit.HasAlert && _reminderToEdit.ReminderTime.HasValue)
+        {
+            await NotificationService.ScheduleNotification(
+                _reminderToEdit.Id,
+                _reminderToEdit.Title,
+                _reminderToEdit.Description,
+                _reminderToEdit.ReminderTime.Value);
+        }
 
         OnReminderAdded?.Invoke(_reminderToEdit);
 
@@ -159,6 +170,8 @@ public partial class AddReminderPage : ContentPage
         }
 
         OnReminderAdded?.Invoke(reminder);
+
+        await NotificationService.CancelNotification(reminder.Id);
 
         if (hasAlert && reminderTime.HasValue)
         {

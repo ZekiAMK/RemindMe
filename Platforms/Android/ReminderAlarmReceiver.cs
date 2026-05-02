@@ -32,11 +32,38 @@ public class ReminderAlarmReceiver : BroadcastReceiver
             builder = new Notification.Builder(context);
         }
 
+        // COMPLETE intent
+        var completeIntent = new Intent(context, typeof(ReminderActionReceiver));
+        completeIntent.SetAction("COMPLETE");
+        completeIntent.PutExtra("id", id);
+
+        var completePendingIntent = PendingIntent.GetBroadcast(
+            context,
+            id + 1000,
+            completeIntent,
+            PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable);
+
+        // SNOOZE intent
+        var snoozeIntent = new Intent(context, typeof(ReminderActionReceiver));
+        snoozeIntent.SetAction("SNOOZE");
+        snoozeIntent.PutExtra("id", id);
+        snoozeIntent.PutExtra("title", title);
+        snoozeIntent.PutExtra("description", description);
+
+        var snoozePendingIntent = PendingIntent.GetBroadcast(
+            context,
+            id + 2000,
+            snoozeIntent,
+            PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable);
+
+        // notification builder
         var notification = builder
             .SetContentTitle(title)
             .SetContentText(description)
-            .SetSmallIcon(Android.Resource.Drawable.IcDialogInfo)
+            .SetSmallIcon(Resource.Mipmap.appicon)
             .SetAutoCancel(true)
+            .AddAction(0, "Complete", completePendingIntent)
+            .AddAction(0, "Snooze 15 min", snoozePendingIntent)
             .Build();
 
         var manager = (NotificationManager?)context.GetSystemService(Context.NotificationService);
