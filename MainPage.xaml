@@ -8,134 +8,135 @@
              BackgroundColor="#0B2B14">
 
         <Grid RowDefinitions="Auto,*"
-                        RowSpacing="20"
-                        Padding="20">
+              RowSpacing="20"
+              Padding="20">
 
                 <VerticalStackLayout Grid.Row="0"
-                                Spacing="20">
+                                     Spacing="20">
+
                         <Label Text="RemindMe"
-                                        FontSize="32"
-                                        FontAttributes="Bold"
+                               FontSize="32"
+                               FontAttributes="Bold"
                                TextColor="White"
-                                        HorizontalOptions="Center"/>
+                               HorizontalOptions="Center"/>
 
                         <Label Text="Your daily reminders"
-                                        FontSize="16"
+                               FontSize="16"
                                TextColor="#DCECCF"
-                                        HorizontalOptions="Center"/>
+                               HorizontalOptions="Center"/>
 
                         <Button Text="+ Add Reminder"
-                                        Clicked="OnAddReminderClicked"
+                                Clicked="OnAddReminderClicked"
                                 BackgroundColor="#2E7D32"
-                                        TextColor="White"
+                                TextColor="White"
                                 CornerRadius="26"
-                                        WidthRequest="220"
-                                        HeightRequest="52"
+                                WidthRequest="220"
+                                HeightRequest="52"
                                 FontSize="16"
-                                        HorizontalOptions="Center"/>
+                                HorizontalOptions="Center"/>
 
                         <ScrollView Orientation="Horizontal"
-                                        HorizontalScrollBarVisibility="Never">
+                                    HorizontalScrollBarVisibility="Never">
                                 <HorizontalStackLayout Spacing="12">
 
                                         <Button Text="All"
-                                                        Clicked="OnAllClicked"
+                                                Clicked="OnAllClicked"
                                                 BackgroundColor="#214B27"
-                                                        TextColor="White"
+                                                TextColor="White"
                                                 CornerRadius="20"
-                                                        Padding="18,10"
-                                                        FontSize="14">
+                                                Padding="18,10"
+                                                FontSize="14">
                                                 <Button.Triggers>
                                                         <DataTrigger TargetType="Button"
-                                                                        Binding="{Binding ActiveFilter}"
-                                                                        Value="All">
+                                                                     Binding="{Binding ActiveFilter}"
+                                                                     Value="All">
                                                                 <Setter Property="BackgroundColor"
-                                                                                Value="#2E7D32"/>
+                                                                        Value="#2E7D32"/>
                                                         </DataTrigger>
                                                 </Button.Triggers>
                                         </Button>
 
                                         <Button Text="Today"
-                                                        Clicked="OnTodayClicked"
+                                                Clicked="OnTodayClicked"
                                                 BackgroundColor="#214B27"
-                                                        TextColor="White"
+                                                TextColor="White"
                                                 CornerRadius="20"
-                                                        Padding="18,10"
-                                                        FontSize="14">
+                                                Padding="18,10"
+                                                FontSize="14">
                                                 <Button.Triggers>
                                                         <DataTrigger TargetType="Button"
-                                                                        Binding="{Binding ActiveFilter}"
-                                                                        Value="Today">
+                                                                     Binding="{Binding ActiveFilter}"
+                                                                     Value="Today">
                                                                 <Setter Property="BackgroundColor"
-                                                                                Value="#2E7D32"/>
+                                                                        Value="#2E7D32"/>
                                                         </DataTrigger>
                                                 </Button.Triggers>
                                         </Button>
 
                                         <Button Text="Important"
-                                                        Clicked="OnImportantClicked"
+                                                Clicked="OnImportantClicked"
                                                 BackgroundColor="#214B27"
-                                                        TextColor="White"
+                                                TextColor="White"
                                                 CornerRadius="20"
-                                                        Padding="18,10"
-                                                        FontSize="14">
+                                                Padding="18,10"
+                                                FontSize="14">
                                                 <Button.Triggers>
                                                         <DataTrigger TargetType="Button"
-                                                                        Binding="{Binding ActiveFilter}"
-                                                                        Value="Important">
+                                                                     Binding="{Binding ActiveFilter}"
+                                                                     Value="Important">
                                                                 <Setter Property="BackgroundColor"
-                                                                                Value="#2E7D32"/>
+                                                                        Value="#2E7D32"/>
                                                         </DataTrigger>
                                                 </Button.Triggers>
                                         </Button>
 
                                         <Button Text="No Alert"
-                                                        Clicked="OnNoAlertClicked"
+                                                Clicked="OnNoAlertClicked"
                                                 BackgroundColor="#214B27"
-                                                        TextColor="White"
+                                                TextColor="White"
                                                 CornerRadius="20"
-                                                        Padding="18,10"
-                                                        FontSize="14">
+                                                Padding="18,10"
+                                                FontSize="14">
                                                 <Button.Triggers>
                                                         <DataTrigger TargetType="Button"
-                                                                        Binding="{Binding ActiveFilter}"
-                                                                        Value="No Alert">
+                                                                     Binding="{Binding ActiveFilter}"
+                                                                     Value="No Alert">
                                                                 <Setter Property="BackgroundColor"
-                                                                                Value="#2E7D32"/>
+                                                                        Value="#2E7D32"/>
                                                         </DataTrigger>
                                                 </Button.Triggers>
                                         </Button>
 
                                         <Button Text="Completed"
-                                                        Clicked="OnCompletedClicked"
+                                                Clicked="OnCompletedClicked"
                                                 BackgroundColor="#214B27"
-                                                        TextColor="White"
+                                                TextColor="White"
                                                 CornerRadius="20"
-                                                        Padding="18,10"
-                                                        FontSize="14">
+                                                Padding="18,10"
+                                                FontSize="14">
                                                 <Button.Triggers>
                                                         <DataTrigger TargetType="Button"
-                                                                        Binding="{Binding ActiveFilter}"
-                                                                        Value="Completed">
+                                                                     Binding="{Binding ActiveFilter}"
+                                                                     Value="Completed">
                                                                 <Setter Property="BackgroundColor"
-                                                                                Value="#2E7D32"/>
+                                                                        Value="#2E7D32"/>
                                                         </DataTrigger>
                                                 </Button.Triggers>
                                         </Button>
 
                                         <Button Text="Past"
-                                                        Clicked="OnPastClicked"
+                                                Clicked="OnPastClicked"
                                                 BackgroundColor="#214B27"
-                                                        TextColor="White"
+                                                TextColor="White"
                                                 CornerRadius="20"
-                                                        Padding="18,10"
-                                                        FontSize="14">
+                                                Padding="18,10"
+                                                FontSize="14">
                                                 <Button.Triggers>
                                                         <DataTrigger TargetType="Button"
-                                                                        Binding="{Binding ActiveFilter}"
-                                                                        Value="Past">
+                                                                     Binding="{Binding ActiveFilter}"
+                                                                     Value="Past">
                                                                 <Setter Property="BackgroundColor"
-                                                                                Value="#2E7D32"/>
+                                                                        Value="#2E7D32"/>
                                                         </DataTrigger>
                                                 </Button.Triggers>
                                         </Button>
@@ -154,11 +155,11 @@
                                 </Border.StrokeShape>
 
                                 <Grid ColumnDefinitions="*,Auto,Auto,Auto"
-                                                ColumnSpacing="10">
+                                      ColumnSpacing="10">
                                         <Label Text="{Binding SelectedCount, StringFormat='{}{0} selected'}"
                                                TextColor="White"
-                                                        FontSize="15"
-                                                        VerticalOptions="Center"/>
+                                               FontSize="15"
+                                               VerticalOptions="Center"/>
 
                                         <Button Grid.Column="1"
                                                 Text="{Binding SelectionPrimaryActionText}"
@@ -189,6 +190,7 @@
 
                 <CollectionView Grid.Row="1"
                                 ItemsSource="{Binding Reminders}"
+                                IsVisible="{Binding HasReminders}"
                                 VerticalOptions="FillAndExpand"
                                 SelectionMode="None">
 
@@ -206,29 +208,29 @@
 
                                                 <Border.Triggers>
                                                         <DataTrigger TargetType="Border"
-                                                                        Binding="{Binding IsSelected}"
-                                                                        Value="True">
+                                                                     Binding="{Binding IsSelected}"
+                                                                     Value="True">
                                                                 <Setter Property="BackgroundColor"
-                                                                                Value="#DFF3E2"/>
+                                                                        Value="#DFF3E2"/>
                                                                 <Setter Property="StrokeThickness"
-                                                                                Value="3"/>
+                                                                        Value="3"/>
                                                         </DataTrigger>
 
                                                         <DataTrigger TargetType="Border"
-                                                                        Binding="{Binding IsCompleted}"
-                                                                        Value="True">
+                                                                     Binding="{Binding IsCompleted}"
+                                                                     Value="True">
                                                                 <Setter Property="BackgroundColor"
-                                                                                Value="#ECECEC"/>
+                                                                        Value="#ECECEC"/>
                                                                 <Setter Property="Opacity"
-                                                                                Value="0.9"/>
+                                                                        Value="0.9"/>
                                                         </DataTrigger>
                                                 </Border.Triggers>
 
                                                 <Grid ColumnDefinitions="*,Auto"
-                                                                ColumnSpacing="16">
+                                                      ColumnSpacing="16">
 
                                                         <VerticalStackLayout Grid.Column="0"
-                                                                        Spacing="8">
+                                                                             Spacing="8">
                                                                 <VerticalStackLayout.GestureRecognizers>
                                                                         <TapGestureRecognizer Tapped="OnReminderCardTapped"
                                                                                               CommandParameter="{Binding .}"/>
@@ -240,19 +242,19 @@
                                                                        TextColor="#0B2B14">
                                                                         <Label.Triggers>
                                                                                 <DataTrigger TargetType="Label"
-                                                                                                Binding="{Binding IsPastDue}"
-                                                                                                Value="True">
+                                                                                             Binding="{Binding IsPastDue}"
+                                                                                             Value="True">
                                                                                         <Setter Property="TextColor"
-                                                                                                        Value="#C62828"/>
+                                                                                                Value="#C62828"/>
                                                                                 </DataTrigger>
 
                                                                                 <DataTrigger TargetType="Label"
-                                                                                                Binding="{Binding IsCompleted}"
-                                                                                                Value="True">
+                                                                                             Binding="{Binding IsCompleted}"
+                                                                                             Value="True">
                                                                                         <Setter Property="TextDecorations"
-                                                                                                        Value="Strikethrough"/>
+                                                                                                Value="Strikethrough"/>
                                                                                         <Setter Property="TextColor"
-                                                                                                        Value="#6F6F6F"/>
+                                                                                                Value="#6F6F6F"/>
                                                                                 </DataTrigger>
                                                                         </Label.Triggers>
                                                                 </Label>
@@ -262,19 +264,19 @@
                                                                        TextColor="#2E3F34">
                                                                         <Label.Triggers>
                                                                                 <DataTrigger TargetType="Label"
-                                                                                                Binding="{Binding IsPastDue}"
-                                                                                                Value="True">
+                                                                                             Binding="{Binding IsPastDue}"
+                                                                                             Value="True">
                                                                                         <Setter Property="TextColor"
-                                                                                                        Value="#A94442"/>
+                                                                                                Value="#A94442"/>
                                                                                 </DataTrigger>
 
                                                                                 <DataTrigger TargetType="Label"
-                                                                                                Binding="{Binding IsCompleted}"
-                                                                                                Value="True">
+                                                                                             Binding="{Binding IsCompleted}"
+                                                                                             Value="True">
                                                                                         <Setter Property="TextDecorations"
-                                                                                                        Value="Strikethrough"/>
+                                                                                                Value="Strikethrough"/>
                                                                                         <Setter Property="TextColor"
-                                                                                                        Value="#7A7A7A"/>
+                                                                                                Value="#7A7A7A"/>
                                                                                 </DataTrigger>
                                                                         </Label.Triggers>
                                                                 </Label>
@@ -284,19 +286,19 @@
                                                                        TextColor="#5F6E63">
                                                                         <Label.Triggers>
                                                                                 <DataTrigger TargetType="Label"
-                                                                                                Binding="{Binding IsPastDue}"
-                                                                                                Value="True">
+                                                                                             Binding="{Binding IsPastDue}"
+                                                                                             Value="True">
                                                                                         <Setter Property="TextColor"
-                                                                                                        Value="#D32F2F"/>
+                                                                                                Value="#D32F2F"/>
                                                                                 </DataTrigger>
 
                                                                                 <DataTrigger TargetType="Label"
-                                                                                                Binding="{Binding IsCompleted}"
-                                                                                                Value="True">
+                                                                                             Binding="{Binding IsCompleted}"
+                                                                                             Value="True">
                                                                                         <Setter Property="TextDecorations"
-                                                                                                        Value="Strikethrough"/>
+                                                                                                Value="Strikethrough"/>
                                                                                         <Setter Property="TextColor"
-                                                                                                        Value="#7A7A7A"/>
+                                                                                                Value="#7A7A7A"/>
                                                                                 </DataTrigger>
                                                                         </Label.Triggers>
                                                                 </Label>
@@ -331,10 +333,10 @@
 
                                                                         <Button.Triggers>
                                                                                 <DataTrigger TargetType="Button"
-                                                                                                Binding="{Binding IsCompleted}"
-                                                                                                Value="True">
+                                                                                             Binding="{Binding IsCompleted}"
+                                                                                             Value="True">
                                                                                         <Setter Property="IsVisible"
-                                                                                                        Value="False"/>
+                                                                                                Value="False"/>
                                                                                 </DataTrigger>
                                                                         </Button.Triggers>
                                                                 </Button>
@@ -345,6 +347,29 @@
                                 </DataTemplate>
                         </CollectionView.ItemTemplate>
                 </CollectionView>
+
+                <VerticalStackLayout Grid.Row="1"
+                                     IsVisible="{Binding HasNoReminders}"
+                                     VerticalOptions="Center"
+                                     HorizontalOptions="Center"
+                                     Spacing="10"
+                                     Padding="20">
+
+                        <Label Text="☘"
+                               FontSize="44"
+                               HorizontalOptions="Center"/>
+
+                        <Label Text="{Binding EmptyStateMessage}"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalTextAlignment="Center"/>
+
+                        <Label Text="Your reminders will appear here."
+                               FontSize="14"
+                               TextColor="#DCECCF"
+                               HorizontalTextAlignment="Center"/>
+                </VerticalStackLayout>
 
         </Grid>
 </ContentPage>

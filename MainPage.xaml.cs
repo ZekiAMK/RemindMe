@@ -16,6 +16,21 @@ public partial class MainPage : ContentPage
 
     public string ActiveFilter => _activeFilter;
 
+    public bool HasNoReminders => Reminders.Count == 0;
+
+    public bool HasReminders => Reminders.Count > 0;
+
+    public string EmptyStateMessage => _activeFilter switch
+    {
+        "All" => "No reminders yet",
+        "Today" => "Nothing scheduled for today",
+        "Important" => "No important reminders",
+        "No Alert" => "No reminders without alerts",
+        "Completed" => "No completed reminders yet",
+        "Past" => "No overdue reminders",
+        _ => "No reminders yet"
+    };
+
     public string SelectionPrimaryActionText =>
         _activeFilter == "Completed" ? "Restore" : "Complete";
 
