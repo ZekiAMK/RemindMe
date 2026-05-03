@@ -14,7 +14,6 @@
 
                 <VerticalStackLayout Grid.Row="0"
                                      Spacing="20">
-
                         <Label Text="RemindMe"
                                FontSize="32"
                                FontAttributes="Bold"
@@ -126,7 +125,6 @@
                                                 Padding="12,8"/>
                                 </Grid>
                         </Border>
-
                 </VerticalStackLayout>
 
                 <CollectionView Grid.Row="1"
@@ -182,6 +180,13 @@
                                                                        TextColor="#0B2B14">
                                                                         <Label.Triggers>
                                                                                 <DataTrigger TargetType="Label"
+                                                                                             Binding="{Binding IsPastDue}"
+                                                                                             Value="True">
+                                                                                        <Setter Property="TextColor"
+                                                                                                Value="#C62828"/>
+                                                                                </DataTrigger>
+
+                                                                                <DataTrigger TargetType="Label"
                                                                                              Binding="{Binding IsCompleted}"
                                                                                              Value="True">
                                                                                         <Setter Property="TextDecorations"
@@ -197,6 +202,13 @@
                                                                        TextColor="#2E3F34">
                                                                         <Label.Triggers>
                                                                                 <DataTrigger TargetType="Label"
+                                                                                             Binding="{Binding IsPastDue}"
+                                                                                             Value="True">
+                                                                                        <Setter Property="TextColor"
+                                                                                                Value="#A94442"/>
+                                                                                </DataTrigger>
+
+                                                                                <DataTrigger TargetType="Label"
                                                                                              Binding="{Binding IsCompleted}"
                                                                                              Value="True">
                                                                                         <Setter Property="TextDecorations"
@@ -211,6 +223,13 @@
                                                                        FontSize="13"
                                                                        TextColor="#5F6E63">
                                                                         <Label.Triggers>
+                                                                                <DataTrigger TargetType="Label"
+                                                                                             Binding="{Binding IsPastDue}"
+                                                                                             Value="True">
+                                                                                        <Setter Property="TextColor"
+                                                                                                Value="#D32F2F"/>
+                                                                                </DataTrigger>
+
                                                                                 <DataTrigger TargetType="Label"
                                                                                              Binding="{Binding IsCompleted}"
                                                                                              Value="True">
@@ -261,12 +280,10 @@
                                                                 </Button>
 
                                                         </VerticalStackLayout>
-
                                                 </Grid>
                                         </Border>
                                 </DataTemplate>
                         </CollectionView.ItemTemplate>
                 </CollectionView>
-
         </Grid>
 </ContentPage>

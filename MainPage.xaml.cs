@@ -7,7 +7,9 @@ namespace RemindMe;
 
 public partial class MainPage : ContentPage
 {
-    private List<ReminderItem> AllReminders { get; set; }
+    private readonly DatabaseService _db;
+
+    private List<ReminderItem> AllReminders { get; set; } = new();
     public List<ReminderItem> Reminders { get; set; } = new();
 
     private string _activeFilter = "All";
@@ -28,37 +30,67 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
 
-        AllReminders = LoadReminders();
+        string dbPath = Path.Combine(FileSystem.AppDataDirectory, "reminders.db");
+        _db = new DatabaseService(dbPath);
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadRemindersAsync();
+    }
+
+    private async Task LoadRemindersAsync()
+    {
+        AllReminders = await _db.GetRemindersAsync();
 
         if (AllReminders.Count == 0)
         {
-            AllReminders = new List<ReminderItem>
+            var gym = new ReminderItem
             {
-                new ReminderItem { Id = Random.Shared.Next(), Title = "Gym", Description = "Leg day", ReminderTime = DateTime.Now.AddHours(2), IsCompleted = false, HasAlert = true },
-                new ReminderItem { Id = Random.Shared.Next(), Title = "Study", Description = "Algorithms", ReminderTime = DateTime.Now.AddHours(4), IsCompleted = false, HasAlert = true }
+                Title = "Gym",
+                Description = "Leg day",
+                ReminderTime = DateTime.Now.AddHours(2),
+                IsCompleted = false,
+                HasAlert = true
             };
 
-            SaveReminders();
+            var study = new ReminderItem
+            {
+                Title = "Study",
+                Description = "Algorithms",
+                ReminderTime = DateTime.Now.AddHours(4),
+                IsCompleted = false,
+                HasAlert = true
+            };
+
+            await _db.SaveReminderAsync(gym);
+            await _db.SaveReminderAsync(study);
+
+            AllReminders = await _db.GetRemindersAsync();
         }
 
         ApplyFilter(_activeFilter);
     }
 
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-
-        AllReminders = LoadReminders();
-        ApplyFilter(_activeFilter);
-    }
-
     private async void OnAddReminderClicked(object? sender, EventArgs e)
     {
-        AddReminderPage.OnReminderAdded = (reminder) =>
+        AddReminderPage.OnReminderAdded = async (reminder) =>
         {
-            AllReminders.Add(reminder);
-            SaveReminders();
-            ApplyFilter(_activeFilter);
+            await _db.SaveReminderAsync(reminder);
+
+            if (reminder.HasAlert && reminder.ReminderTime.HasValue && !reminder.IsCompleted)
+            {
+                await NotificationService.CancelNotification(reminder.Id);
+
+                await NotificationService.ScheduleNotification(
+                    reminder.Id,
+                    reminder.Title,
+                    reminder.Description,
+                    reminder.ReminderTime.Value);
+            }
+
+            await LoadRemindersAsync();
         };
 
         await Navigation.PushAsync(new AddReminderPage());
@@ -128,16 +160,6 @@ public partial class MainPage : ContentPage
         BindingContext = this;
     }
 
-    private void SaveReminders()
-    {
-        ReminderStorageService.SaveReminders(AllReminders);
-    }
-
-    private List<ReminderItem> LoadReminders()
-    {
-        return ReminderStorageService.LoadReminders();
-    }
-
     private async void OnReminderCardTapped(object? sender, TappedEventArgs e)
     {
         if (e.Parameter is not ReminderItem reminder)
@@ -149,23 +171,32 @@ public partial class MainPage : ContentPage
             return;
         }
 
-        AddReminderPage.OnReminderAdded = (updatedReminder) =>
+        AddReminderPage.OnReminderAdded = async (updatedReminder) =>
         {
-            int index = AllReminders.IndexOf(reminder);
+            await _db.SaveReminderAsync(updatedReminder);
 
-            if (index >= 0)
-                AllReminders[index] = updatedReminder;
+            await NotificationService.CancelNotification(updatedReminder.Id);
 
-            SaveReminders();
-            ApplyFilter(_activeFilter);
+            if (updatedReminder.HasAlert &&
+                updatedReminder.ReminderTime.HasValue &&
+                !updatedReminder.IsCompleted)
+            {
+                await NotificationService.ScheduleNotification(
+                    updatedReminder.Id,
+                    updatedReminder.Title,
+                    updatedReminder.Description,
+                    updatedReminder.ReminderTime.Value);
+            }
+
+            await LoadRemindersAsync();
         };
 
         AddReminderPage.OnReminderDeleted = async (deletedReminder) =>
         {
             await NotificationService.CancelNotification(deletedReminder.Id);
-            AllReminders.Remove(deletedReminder);
-            SaveReminders();
-            ApplyFilter(_activeFilter);
+            await _db.DeleteReminderAsync(deletedReminder);
+
+            await LoadRemindersAsync();
         };
 
         await Navigation.PushAsync(new AddReminderPage(reminder));
@@ -182,12 +213,26 @@ public partial class MainPage : ContentPage
             return;
         }
 
+        button.Text = "✓";
+        button.BackgroundColor = Color.FromArgb("#2E7D32");
+        button.TextColor = Colors.White;
+        button.BorderColor = Colors.Transparent;
+        button.IsEnabled = false;
+
+        if (button.Parent is VerticalStackLayout stack && stack.Parent is Grid grid && grid.Parent is Border card)
+        {
+            await card.FadeToAsync(0, 300);
+        }
+
         await NotificationService.CancelNotification(reminder.Id);
 
         reminder.IsCompleted = true;
-        SaveReminders();
+        reminder.IsSelected = false;
 
-        ApplyFilter(_activeFilter);
+        await _db.SaveReminderAsync(reminder);
+
+        await Task.Delay(300);
+        await LoadRemindersAsync();
     }
 
     private async void OnCompleteSelectedClicked(object? sender, EventArgs e)
@@ -204,6 +249,9 @@ public partial class MainPage : ContentPage
             if (shouldRestore)
             {
                 reminder.IsCompleted = false;
+                reminder.IsSelected = false;
+
+                await _db.SaveReminderAsync(reminder);
 
                 if (reminder.HasAlert && reminder.ReminderTime.HasValue)
                 {
@@ -217,15 +265,16 @@ public partial class MainPage : ContentPage
             else
             {
                 await NotificationService.CancelNotification(reminder.Id);
-                reminder.IsCompleted = true;
-            }
 
-            reminder.IsSelected = false;
+                reminder.IsCompleted = true;
+                reminder.IsSelected = false;
+
+                await _db.SaveReminderAsync(reminder);
+            }
         }
 
-        SaveReminders();
         IsSelectionMode = false;
-        ApplyFilter(_activeFilter);
+        await LoadRemindersAsync();
     }
 
     private void OnSelectModeClicked(object? sender, EventArgs e)
@@ -279,11 +328,10 @@ public partial class MainPage : ContentPage
         foreach (var reminder in selected)
         {
             await NotificationService.CancelNotification(reminder.Id);
-            AllReminders.Remove(reminder);
+            await _db.DeleteReminderAsync(reminder);
         }
 
-        SaveReminders();
         IsSelectionMode = false;
-        ApplyFilter(_activeFilter);
+        await LoadRemindersAsync();
     }
 }
