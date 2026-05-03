@@ -14,6 +14,8 @@ public partial class MainPage : ContentPage
 
     private string _activeFilter = "All";
 
+    public string ActiveFilter => _activeFilter;
+
     public string SelectionPrimaryActionText =>
         _activeFilter == "Completed" ? "Restore" : "Complete";
 
