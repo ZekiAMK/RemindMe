@@ -61,32 +61,6 @@ public partial class MainPage : ContentPage
     {
         AllReminders = await _db.GetRemindersAsync();
 
-        if (AllReminders.Count == 0)
-        {
-            var gym = new ReminderItem
-            {
-                Title = "Gym",
-                Description = "Leg day",
-                ReminderTime = DateTime.Now.AddHours(2),
-                IsCompleted = false,
-                HasAlert = true
-            };
-
-            var study = new ReminderItem
-            {
-                Title = "Study",
-                Description = "Algorithms",
-                ReminderTime = DateTime.Now.AddHours(4),
-                IsCompleted = false,
-                HasAlert = true
-            };
-
-            await _db.SaveReminderAsync(gym);
-            await _db.SaveReminderAsync(study);
-
-            AllReminders = await _db.GetRemindersAsync();
-        }
-
         ApplyFilter(_activeFilter);
     }
 
