@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RemindMe.Pages.PomodoroHistoryPage"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#0B2B14">
+
+  <Grid RowDefinitions="Auto,Auto,*"
+        Padding="20"
+        RowSpacing="16">
+
+    <VerticalStackLayout Grid.Row="0"
+                         Spacing="16">
+
+      <Button Text="← Back"
+              Clicked="OnBackClicked"
+              BackgroundColor="Transparent"
+              TextColor="#DCECCF"
+              FontSize="18"
+              Padding="0"
+              HorizontalOptions="Start"/>
+
+      <Label Text="Pomodoro History"
+             FontSize="30"
+             TextColor="White"
+             FontAttributes="Bold"/>
+
+    </VerticalStackLayout>
+
+    <Border Grid.Row="1"
+            IsVisible="{Binding IsSelectionMode}"
+            BackgroundColor="#163D1D"
+            Stroke="#2E7D32"
+            StrokeThickness="1"
+            Padding="14">
+
+      <Border.StrokeShape>
+        <RoundRectangle CornerRadius="18"/>
+      </Border.StrokeShape>
+
+      <Grid ColumnDefinitions="*,Auto,Auto"
+            ColumnSpacing="10">
+
+        <Label Text="{Binding SelectedCount, StringFormat='{}{0} selected'}"
+               TextColor="White"
+               FontSize="15"
+               VerticalOptions="Center"/>
+
+        <Button Grid.Column="1"
+                Text="Delete"
+                Clicked="OnDeleteSelectedClicked"
+                BackgroundColor="#B71C1C"
+                TextColor="White"
+                CornerRadius="16"
+                Padding="12,8"/>
+
+        <Button Grid.Column="2"
+                Text="Cancel"
+                Clicked="OnCancelSelectionClicked"
+                BackgroundColor="Gray"
+                TextColor="White"
+                CornerRadius="16"
+                Padding="12,8"/>
+
+      </Grid>
+    </Border>
+
+    <CollectionView Grid.Row="2"
+                    ItemsSource="{Binding Sessions}"
+                    SelectionMode="None">
+
+      <CollectionView.ItemTemplate>
+        <DataTemplate>
+          <Border BackgroundColor="White"
+                  Stroke="#2E7D32"
+                  StrokeThickness="1"
+                  Padding="16"
+                  Margin="0,0,0,14">
+
+            <Border.StrokeShape>
+              <RoundRectangle CornerRadius="20"/>
+            </Border.StrokeShape>
+
+            <Border.GestureRecognizers>
+              <TapGestureRecognizer Tapped="OnSessionTapped"
+                                    CommandParameter="{Binding .}"/>
+            </Border.GestureRecognizers>
+
+            <Border.Triggers>
+              <DataTrigger TargetType="Border"
+                           Binding="{Binding IsSelected}"
+                           Value="True">
+                <Setter Property="BackgroundColor"
+                        Value="#DFF3E2"/>
+                <Setter Property="StrokeThickness"
+                        Value="3"/>
+              </DataTrigger>
+            </Border.Triggers>
+
+            <Grid ColumnDefinitions="*,Auto"
+                  ColumnSpacing="12">
+
+              <VerticalStackLayout Grid.Column="0"
+                                   Spacing="6">
+
+                <Label Text="{Binding StartedAt, StringFormat='{}{0:MMM d, HH:mm}'}"
+                       TextColor="#0B2B14"
+                       FontSize="18"
+                       FontAttributes="Bold"/>
+
+                <Label Text="{Binding FocusMinutes, StringFormat='Focus: {0} min'}"
+                       TextColor="#2E3F34"/>
+
+                <Label Text="{Binding BreakMinutes, StringFormat='Break: {0} min'}"
+                       TextColor="#2E3F34"/>
+
+                <Label Text="{Binding WasContinued, StringFormat='Continued: {0}'}"
+                       TextColor="#5F6E63"
+                       FontSize="13"/>
+
+              </VerticalStackLayout>
+
+              <Button Grid.Column="1"
+                      Text="⋯"
+                      Clicked="OnSelectSessionClicked"
+                      CommandParameter="{Binding .}"
+                      WidthRequest="34"
+                      HeightRequest="34"
+                      CornerRadius="17"
+                      BackgroundColor="Transparent"
+                      BorderColor="#2E7D32"
+                      BorderWidth="1"
+                      TextColor="#2E7D32"
+                      FontSize="18"
+                      VerticalOptions="Center"/>
+
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </CollectionView.ItemTemplate>
+    </CollectionView>
+
+  </Grid>
+</ContentPage>

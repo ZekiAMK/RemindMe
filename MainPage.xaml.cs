@@ -92,6 +92,11 @@ public partial class MainPage : ContentPage
         await Navigation.PushAsync(new PomodoroPage());
     }
 
+    private async void OnHistoryClicked(object? sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new PomodoroHistoryPage());
+    }
+
     private void OnAllClicked(object? sender, EventArgs e) => ApplyFilter("All");
     private void OnTodayClicked(object? sender, EventArgs e) => ApplyFilter("Today");
     private void OnNoAlertClicked(object? sender, EventArgs e) => ApplyFilter("No Alert");

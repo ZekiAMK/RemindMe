@@ -46,6 +46,12 @@
                                 FontAttributes="Bold"
                                 HorizontalOptions="Center"/>
 
+                        <Button Text="📊 Pomodoro History"
+                                Clicked="OnHistoryClicked"
+                                BackgroundColor="#214B27"
+                                TextColor="White"
+                                CornerRadius="24"/>
+
                         <ScrollView Orientation="Horizontal"
                                     HorizontalScrollBarVisibility="Never">
                                 <HorizontalStackLayout Spacing="12">

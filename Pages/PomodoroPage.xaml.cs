@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using RemindMe.Models;
 using RemindMe.Services;
 
 namespace RemindMe.Pages;
 
 public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
 {
-    private const int PomodoroNotificationId = 900001;
-
     private const string FocusMinutesKey = "PomodoroFocusMinutes";
     private const string BreakMinutesKey = "PomodoroBreakMinutes";
     private const string IsRunningKey = "PomodoroIsRunning";
     private const string IsFocusModeKey = "PomodoroIsFocusMode";
     private const string RemainingSecondsKey = "PomodoroRemainingSeconds";
     private const string LastUpdatedKey = "PomodoroLastUpdated";
+    private const string SessionStartedAtKey = "PomodoroSessionStartedAt";
+
+    private readonly DatabaseService _db;
 
     private IDispatcherTimer? _timer;
 
@@ -81,6 +83,9 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
     {
         InitializeComponent();
 
+        string dbPath = Path.Combine(FileSystem.AppDataDirectory, "reminders.db");
+        _db = new DatabaseService(dbPath);
+
         NavigationPage.SetHasNavigationBar(this, false);
         Shell.SetNavBarIsVisible(this, false);
 
@@ -147,6 +152,8 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
 
             if (_isFocusMode)
             {
+                await SaveFocusSessionAsync(wasContinued: false);
+
                 bool takeBreak = await DisplayAlertAsync(
                     "Focus completed",
                     "Great job. Do you want to take a break now?",
@@ -154,12 +161,19 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
                     "Continue");
 
                 if (takeBreak)
+                {
                     StartBreak();
+                }
                 else
+                {
+                    await SaveFocusSessionAsync(wasContinued: true);
                     StartFocus();
+                }
             }
             else
             {
+                await SaveBreakSessionAsync();
+
                 await DisplayAlertAsync(
                     "Break finished",
                     "Time to get back to work.",
@@ -177,12 +191,14 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
             _timer?.Stop();
             _isRunning = false;
 
-            await NotificationService.CancelNotification(PomodoroNotificationId);
+            await NotificationService.CancelPomodoroNotification();
         }
         else
         {
             if (_remainingSeconds <= 0)
                 _remainingSeconds = (_isFocusMode ? GetFocusMinutes() : GetBreakMinutes()) * 60;
+
+            SaveSessionStartIfNeeded();
 
             _timer?.Start();
             _isRunning = true;
@@ -202,7 +218,9 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
         _isFocusMode = true;
         _remainingSeconds = GetFocusMinutes() * 60;
 
-        await NotificationService.CancelNotification(PomodoroNotificationId);
+        Preferences.Remove(SessionStartedAtKey);
+
+        await NotificationService.CancelPomodoroNotification();
 
         SaveCurrentPomodoroState();
         RefreshAll();
@@ -210,7 +228,9 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
 
     private async void OnSkipClicked(object? sender, EventArgs e)
     {
-        await NotificationService.CancelNotification(PomodoroNotificationId);
+        await NotificationService.CancelPomodoroNotification();
+
+        Preferences.Remove(SessionStartedAtKey);
 
         if (_isFocusMode)
             StartBreak();
@@ -226,6 +246,8 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
         _isFocusMode = true;
         _remainingSeconds = GetFocusMinutes() * 60;
 
+        Preferences.Remove(SessionStartedAtKey);
+
         SaveCurrentPomodoroState();
         RefreshAll();
     }
@@ -238,6 +260,8 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
         _isFocusMode = false;
         _remainingSeconds = GetBreakMinutes() * 60;
 
+        Preferences.Remove(SessionStartedAtKey);
+
         SaveCurrentPomodoroState();
         RefreshAll();
     }
@@ -249,6 +273,68 @@ public partial class PomodoroPage : ContentPage, INotifyPropertyChanged
         await NotificationService.SchedulePomodoroNotification(
             finishTime,
             _isFocusMode);
+    }
+
+    private void SaveSessionStartIfNeeded()
+    {
+        string existingStart = Preferences.Get(SessionStartedAtKey, "");
+
+        if (string.IsNullOrWhiteSpace(existingStart))
+            Preferences.Set(SessionStartedAtKey, DateTime.Now.ToString("O"));
+    }
+
+    private DateTime GetSessionStartedAt()
+    {
+        string startedAtText = Preferences.Get(SessionStartedAtKey, "");
+
+        if (DateTime.TryParse(startedAtText, out DateTime startedAt))
+            return startedAt;
+
+        return DateTime.Now;
+    }
+
+    private async Task SaveFocusSessionAsync(bool wasContinued)
+    {
+        DateTime startedAt = GetSessionStartedAt();
+        DateTime endedAt = DateTime.Now;
+
+        var session = new PomodoroSession
+        {
+            StartedAt = startedAt,
+            EndedAt = endedAt,
+            FocusMinutes = GetFocusMinutes(),
+            BreakMinutes = 0,
+            CompletedFocus = true,
+            CompletedBreak = false,
+            WasContinued = wasContinued,
+            SessionDate = endedAt.Date
+        };
+
+        await _db.SavePomodoroSessionAsync(session);
+
+        Preferences.Remove(SessionStartedAtKey);
+    }
+
+    private async Task SaveBreakSessionAsync()
+    {
+        DateTime startedAt = GetSessionStartedAt();
+        DateTime endedAt = DateTime.Now;
+
+        var session = new PomodoroSession
+        {
+            StartedAt = startedAt,
+            EndedAt = endedAt,
+            FocusMinutes = 0,
+            BreakMinutes = GetBreakMinutes(),
+            CompletedFocus = false,
+            CompletedBreak = true,
+            WasContinued = false,
+            SessionDate = endedAt.Date
+        };
+
+        await _db.SavePomodoroSessionAsync(session);
+
+        Preferences.Remove(SessionStartedAtKey);
     }
 
     private void SaveCurrentPomodoroState()

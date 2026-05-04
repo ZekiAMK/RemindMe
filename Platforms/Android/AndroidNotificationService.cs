@@ -105,10 +105,10 @@ public static class AndroidNotificationService
         intent.PutExtra("isFocusMode", isFocusMode);
 
         var pendingIntent = PendingIntent.GetBroadcast(
-            context,
-            PomodoroNotificationId,
-            intent,
-            PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable);
+        context,
+    PomodoroNotificationId,
+        intent,
+    PendingIntentFlags.CancelCurrent | PendingIntentFlags.Immutable);
 
         var alarmManager = (AlarmManager?)context.GetSystemService(Context.AlarmService);
 
