@@ -8,6 +8,8 @@
 		android:supportsRtl="true">
 
 		<receiver android:name=".Services.ReminderActionReceiver" />
+		<receiver android:name=".Services.PomodoroAlarmReceiver" />
+		<receiver android:name=".Services.PomodoroActionReceiver" />
 
 	</application>
 

@@ -11,6 +11,8 @@ public static class AndroidNotificationService
 {
     public const string ChannelId = "remindme_channel";
 
+    public const int PomodoroNotificationId = 900001;
+
     public static void ScheduleNotification(int id, string title, string description, DateTime notifyTime)
     {
         var context = Platform.AppContext;
@@ -91,5 +93,70 @@ public static class AndroidNotificationService
 
         var manager = (NotificationManager?)context.GetSystemService(Context.NotificationService);
         manager?.CreateNotificationChannel(channel);
+    }
+
+    public static void SchedulePomodoroNotification(DateTime notifyTime, bool isFocusMode)
+    {
+        var context = Platform.AppContext;
+
+        CreateNotificationChannel(context);
+
+        var intent = new Intent(context, typeof(PomodoroAlarmReceiver));
+        intent.PutExtra("isFocusMode", isFocusMode);
+
+        var pendingIntent = PendingIntent.GetBroadcast(
+            context,
+            PomodoroNotificationId,
+            intent,
+            PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable);
+
+        var alarmManager = (AlarmManager?)context.GetSystemService(Context.AlarmService);
+
+        if (alarmManager == null)
+            return;
+
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.S && !alarmManager.CanScheduleExactAlarms())
+        {
+            var settingsIntent = new Intent(Settings.ActionRequestScheduleExactAlarm);
+            settingsIntent.SetFlags(ActivityFlags.NewTask);
+            context.StartActivity(settingsIntent);
+            return;
+        }
+
+        long triggerTime = new DateTimeOffset(notifyTime).ToUnixTimeMilliseconds();
+
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
+        {
+            alarmManager.SetExactAndAllowWhileIdle(
+                AlarmType.RtcWakeup,
+                triggerTime,
+                pendingIntent);
+        }
+        else
+        {
+            alarmManager.SetExact(
+                AlarmType.RtcWakeup,
+                triggerTime,
+                pendingIntent);
+        }
+    }
+
+    public static void CancelPomodoroNotification()
+    {
+        var context = Platform.AppContext;
+
+        var intent = new Intent(context, typeof(PomodoroAlarmReceiver));
+
+        var pendingIntent = PendingIntent.GetBroadcast(
+            context,
+            PomodoroNotificationId,
+            intent,
+            PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable);
+
+        var alarmManager = (AlarmManager?)context.GetSystemService(Context.AlarmService);
+        alarmManager?.Cancel(pendingIntent);
+
+        var manager = (NotificationManager?)context.GetSystemService(Context.NotificationService);
+        manager?.Cancel(PomodoroNotificationId);
     }
 }

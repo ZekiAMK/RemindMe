@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RemindMe.Pages.PomodoroPage"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#0B2B14">
+
+       <Grid RowDefinitions="Auto,*"
+             Padding="22"
+             RowSpacing="24">
+
+              <VerticalStackLayout Grid.Row="0"
+                                   Spacing="14">
+
+                     <Button Text="← Back"
+                             Clicked="OnBackClicked"
+                             BackgroundColor="Transparent"
+                             TextColor="#DCECCF"
+                             FontSize="18"
+                             Padding="0"
+                             HorizontalOptions="Start"/>
+
+                     <VerticalStackLayout Spacing="2">
+                            <Label Text="Pomodoro"
+                                   TextColor="White"
+                                   FontSize="34"
+                                   FontAttributes="Bold"/>
+
+                            <Label Text="Stay focused. Build discipline."
+                                   TextColor="#DCECCF"
+                                   FontSize="15"/>
+                     </VerticalStackLayout>
+
+              </VerticalStackLayout>
+
+              <ScrollView Grid.Row="1">
+                     <VerticalStackLayout Spacing="24">
+
+                            <Border BackgroundColor="#12381A"
+                                    Stroke="#2E7D32"
+                                    StrokeThickness="1"
+                                    Padding="24">
+                                   <Border.StrokeShape>
+                                          <RoundRectangle CornerRadius="28"/>
+                                   </Border.StrokeShape>
+
+                                   <VerticalStackLayout Spacing="18"
+                                                        HorizontalOptions="Center">
+
+                                          <Label Text="{Binding CurrentModeText}"
+                                                 TextColor="#DCECCF"
+                                                 FontSize="18"
+                                                 FontAttributes="Bold"
+                                                 HorizontalTextAlignment="Center"/>
+
+                                          <Label Text="{Binding TimerText}"
+                                                 TextColor="White"
+                                                 FontSize="64"
+                                                 FontAttributes="Bold"
+                                                 HorizontalTextAlignment="Center"/>
+
+                                          <Label Text="{Binding MotivationText}"
+                                                 TextColor="#DCECCF"
+                                                 FontSize="14"
+                                                 HorizontalTextAlignment="Center"/>
+
+                                   </VerticalStackLayout>
+                            </Border>
+
+                            <Border BackgroundColor="White"
+                                    Stroke="#2E7D32"
+                                    StrokeThickness="1"
+                                    Padding="18">
+                                   <Border.StrokeShape>
+                                          <RoundRectangle CornerRadius="24"/>
+                                   </Border.StrokeShape>
+
+                                   <VerticalStackLayout Spacing="18">
+
+                                          <Label Text="Session Setup"
+                                                 TextColor="#0B2B14"
+                                                 FontSize="20"
+                                                 FontAttributes="Bold"/>
+
+                                          <Grid ColumnDefinitions="*,Auto"
+                                                RowDefinitions="Auto,Auto"
+                                                RowSpacing="14"
+                                                ColumnSpacing="12">
+
+                                                 <Label Text="Focus minutes"
+                                                        TextColor="#0B2B14"
+                                                        FontSize="16"
+                                                        VerticalOptions="Center"/>
+
+                                                 <Entry Grid.Column="1"
+                                                        Text="{Binding FocusMinutesText}"
+                                                        Keyboard="Numeric"
+                                                        WidthRequest="80"
+                                                        HorizontalTextAlignment="Center"
+                                                        TextColor="#0B2B14"
+                                                        BackgroundColor="#EAF4EA"/>
+
+                                                 <Label Grid.Row="1"
+                                                        Text="Break minutes"
+                                                        TextColor="#0B2B14"
+                                                        FontSize="16"
+                                                        VerticalOptions="Center"/>
+
+                                                 <Entry Grid.Row="1"
+                                                        Grid.Column="1"
+                                                        Text="{Binding BreakMinutesText}"
+                                                        Keyboard="Numeric"
+                                                        WidthRequest="80"
+                                                        HorizontalTextAlignment="Center"
+                                                        TextColor="#0B2B14"
+                                                        BackgroundColor="#EAF4EA"/>
+
+                                          </Grid>
+                                   </VerticalStackLayout>
+                            </Border>
+
+                            <Grid ColumnDefinitions="*,*"
+                                  ColumnSpacing="12">
+
+                                   <Button Text="{Binding StartPauseButtonText}"
+                                           Clicked="OnStartPauseClicked"
+                                           BackgroundColor="#2E7D32"
+                                           TextColor="White"
+                                           CornerRadius="24"
+                                           HeightRequest="54"
+                                           FontAttributes="Bold"/>
+
+                                   <Button Grid.Column="1"
+                                           Text="Reset"
+                                           Clicked="OnResetClicked"
+                                           BackgroundColor="#214B27"
+                                           TextColor="White"
+                                           CornerRadius="24"
+                                           HeightRequest="54"
+                                           FontAttributes="Bold"/>
+
+                            </Grid>
+
+                            <Button Text="{Binding SkipButtonText}"
+                                    Clicked="OnSkipClicked"
+                                    BackgroundColor="#DCECCF"
+                                    TextColor="#0B2B14"
+                                    CornerRadius="24"
+                                    HeightRequest="52"
+                                    FontAttributes="Bold"/>
+
+                     </VerticalStackLayout>
+              </ScrollView>
+
+       </Grid>
+</ContentPage>

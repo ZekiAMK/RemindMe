@@ -35,6 +35,17 @@
                                 FontSize="16"
                                 HorizontalOptions="Center"/>
 
+                        <Button Text="🍅 Pomodoro"
+                                Clicked="OnPomodoroClicked"
+                                BackgroundColor="#DCECCF"
+                                TextColor="#0B2B14"
+                                CornerRadius="26"
+                                WidthRequest="220"
+                                HeightRequest="52"
+                                FontSize="16"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"/>
+
                         <ScrollView Orientation="Horizontal"
                                     HorizontalScrollBarVisibility="Never">
                                 <HorizontalStackLayout Spacing="12">
