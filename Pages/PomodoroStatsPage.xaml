@@ -6,7 +6,7 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#0B2B14">
 
-        <Grid RowDefinitions="Auto,Auto,Auto,*"
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,*"
               Padding="20"
               RowSpacing="18">
 
@@ -25,6 +25,11 @@
                                TextColor="White"
                                FontAttributes="Bold"/>
 
+                        <Label Text="{Binding RangeText}"
+                               TextColor="White"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+
                         <Label Text="{Binding SummaryText}"
                                TextColor="#DCECCF"
                                FontSize="15"/>
@@ -37,69 +42,75 @@
 
                                 <Button Text="1W"
                                         Clicked="On1Week"
-                                        BackgroundColor="#2E7D32"
+                                        BackgroundColor="{Binding OneWeekColor}"
                                         TextColor="White"
                                         CornerRadius="18"/>
 
                                 <Button Text="3W"
                                         Clicked="On3Week"
-                                        BackgroundColor="#214B27"
+                                        BackgroundColor="{Binding ThreeWeekColor}"
                                         TextColor="White"
                                         CornerRadius="18"/>
 
                                 <Button Text="1M"
                                         Clicked="On1Month"
-                                        BackgroundColor="#214B27"
+                                        BackgroundColor="{Binding OneMonthColor}"
                                         TextColor="White"
                                         CornerRadius="18"/>
 
                                 <Button Text="3M"
                                         Clicked="On3Month"
-                                        BackgroundColor="#214B27"
+                                        BackgroundColor="{Binding ThreeMonthColor}"
                                         TextColor="White"
                                         CornerRadius="18"/>
 
                                 <Button Text="6M"
                                         Clicked="On6Month"
-                                        BackgroundColor="#214B27"
+                                        BackgroundColor="{Binding SixMonthColor}"
                                         TextColor="White"
                                         CornerRadius="18"/>
 
                                 <Button Text="1Y"
                                         Clicked="On1Year"
-                                        BackgroundColor="#214B27"
+                                        BackgroundColor="{Binding OneYearColor}"
                                         TextColor="White"
                                         CornerRadius="18"/>
 
                         </HorizontalStackLayout>
                 </ScrollView>
 
-                <CollectionView Grid.Row="3"
+                <Border Grid.Row="3"
+                        BackgroundColor="White"
+                        Stroke="#2E7D32"
+                        StrokeThickness="1"
+                        Padding="16"
+                        Margin="0,0,0,4">
+
+                        <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="22"/>
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Spacing="10">
+
+                                <Label Text="Focus Chart"
+                                       TextColor="#0B2B14"
+                                       FontSize="18"
+                                       FontAttributes="Bold"/>
+
+                                <GraphicsView x:Name="ChartCanvas"
+                                              HeightRequest="180"/>
+
+                        </VerticalStackLayout>
+                </Border>
+
+                <CollectionView Grid.Row="4"
                                 ItemsSource="{Binding DailyStats}"
                                 SelectionMode="None">
-
-                        <CollectionView.EmptyView>
-                                <VerticalStackLayout VerticalOptions="Center"
-                                                     HorizontalOptions="Center"
-                                                     Spacing="8">
-                                        <Label Text="📊"
-                                               FontSize="42"
-                                               HorizontalOptions="Center"/>
-                                        <Label Text="No statistics yet"
-                                               TextColor="White"
-                                               FontSize="20"
-                                               FontAttributes="Bold"/>
-                                        <Label Text="Complete Pomodoro sessions to see your progress."
-                                               TextColor="#DCECCF"
-                                               FontSize="14"
-                                               HorizontalTextAlignment="Center"/>
-                                </VerticalStackLayout>
-                        </CollectionView.EmptyView>
 
                         <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                         <Border BackgroundColor="White"
-                                                Stroke="#2E7D32"
+                                                Opacity="{Binding CardOpacity}"
                                                 StrokeThickness="1"
                                                 Padding="16"
                                                 Margin="0,0,0,14">
@@ -141,7 +152,6 @@
                                         </Border>
                                 </DataTemplate>
                         </CollectionView.ItemTemplate>
-
                 </CollectionView>
 
         </Grid>
