@@ -139,4 +139,9 @@ public partial class PomodoroHistoryPage : ContentPage
         BindingContext = null;
         BindingContext = this;
     }
+
+    private async void OnStatsClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new PomodoroStatsPage());
+    }
 }

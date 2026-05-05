@@ -26,6 +26,12 @@
              TextColor="White"
              FontAttributes="Bold"/>
 
+      <Button Text="📈 View Statistics"
+              Clicked="OnStatsClicked"
+              BackgroundColor="#2E7D32"
+              TextColor="White"
+              CornerRadius="20"/>
+
     </VerticalStackLayout>
 
     <Grid Grid.Row="1"

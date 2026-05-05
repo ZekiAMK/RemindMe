@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RemindMe.Pages.PomodoroStatsPage"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#0B2B14">
+
+        <Grid RowDefinitions="Auto,Auto,Auto,*"
+              Padding="20"
+              RowSpacing="18">
+
+                <Button Text="← Back"
+                        Clicked="OnBackClicked"
+                        BackgroundColor="Transparent"
+                        TextColor="#DCECCF"
+                        FontSize="18"
+                        Padding="0"
+                        HorizontalOptions="Start"/>
+
+                <VerticalStackLayout Grid.Row="1"
+                                     Spacing="6">
+                        <Label Text="Statistics"
+                               FontSize="34"
+                               TextColor="White"
+                               FontAttributes="Bold"/>
+
+                        <Label Text="{Binding SummaryText}"
+                               TextColor="#DCECCF"
+                               FontSize="15"/>
+                </VerticalStackLayout>
+
+                <ScrollView Grid.Row="2"
+                            Orientation="Horizontal"
+                            HorizontalScrollBarVisibility="Never">
+                        <HorizontalStackLayout Spacing="10">
+
+                                <Button Text="1W"
+                                        Clicked="On1Week"
+                                        BackgroundColor="#2E7D32"
+                                        TextColor="White"
+                                        CornerRadius="18"/>
+
+                                <Button Text="3W"
+                                        Clicked="On3Week"
+                                        BackgroundColor="#214B27"
+                                        TextColor="White"
+                                        CornerRadius="18"/>
+
+                                <Button Text="1M"
+                                        Clicked="On1Month"
+                                        BackgroundColor="#214B27"
+                                        TextColor="White"
+                                        CornerRadius="18"/>
+
+                                <Button Text="3M"
+                                        Clicked="On3Month"
+                                        BackgroundColor="#214B27"
+                                        TextColor="White"
+                                        CornerRadius="18"/>
+
+                                <Button Text="6M"
+                                        Clicked="On6Month"
+                                        BackgroundColor="#214B27"
+                                        TextColor="White"
+                                        CornerRadius="18"/>
+
+                                <Button Text="1Y"
+                                        Clicked="On1Year"
+                                        BackgroundColor="#214B27"
+                                        TextColor="White"
+                                        CornerRadius="18"/>
+
+                        </HorizontalStackLayout>
+                </ScrollView>
+
+                <CollectionView Grid.Row="3"
+                                ItemsSource="{Binding DailyStats}"
+                                SelectionMode="None">
+
+                        <CollectionView.EmptyView>
+                                <VerticalStackLayout VerticalOptions="Center"
+                                                     HorizontalOptions="Center"
+                                                     Spacing="8">
+                                        <Label Text="📊"
+                                               FontSize="42"
+                                               HorizontalOptions="Center"/>
+                                        <Label Text="No statistics yet"
+                                               TextColor="White"
+                                               FontSize="20"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="Complete Pomodoro sessions to see your progress."
+                                               TextColor="#DCECCF"
+                                               FontSize="14"
+                                               HorizontalTextAlignment="Center"/>
+                                </VerticalStackLayout>
+                        </CollectionView.EmptyView>
+
+                        <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                        <Border BackgroundColor="White"
+                                                Stroke="#2E7D32"
+                                                StrokeThickness="1"
+                                                Padding="16"
+                                                Margin="0,0,0,14">
+
+                                                <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="20"/>
+                                                </Border.StrokeShape>
+
+                                                <VerticalStackLayout Spacing="10">
+
+                                                        <Grid ColumnDefinitions="*,Auto">
+                                                                <Label Text="{Binding DateLabel}"
+                                                                       TextColor="#0B2B14"
+                                                                       FontSize="17"
+                                                                       FontAttributes="Bold"/>
+
+                                                                <Label Grid.Column="1"
+                                                                       Text="{Binding FocusText}"
+                                                                       TextColor="#2E7D32"
+                                                                       FontSize="16"
+                                                                       FontAttributes="Bold"/>
+                                                        </Grid>
+
+                                                        <Grid ColumnDefinitions="*,Auto">
+                                                                <ProgressBar Progress="{Binding Progress}"
+                                                                             ProgressColor="#2E7D32"
+                                                                             BackgroundColor="#DCECCF"
+                                                                             HeightRequest="10"
+                                                                             VerticalOptions="Center"/>
+
+                                                                <Label Grid.Column="1"
+                                                                       Text="{Binding SessionsText}"
+                                                                       TextColor="#5F6E63"
+                                                                       FontSize="13"
+                                                                       Margin="12,0,0,0"/>
+                                                        </Grid>
+
+                                                </VerticalStackLayout>
+                                        </Border>
+                                </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+        </Grid>
+</ContentPage>
