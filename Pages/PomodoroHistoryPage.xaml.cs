@@ -14,6 +14,14 @@ public partial class PomodoroHistoryPage : ContentPage
 
     public int SelectedCount => Sessions.Count(s => s.IsSelected);
 
+    public int TodayFocusMinutes { get; set; }
+    public int TotalFocusMinutes { get; set; }
+    public int TotalSessions { get; set; }
+
+    public string TodayFocusText => $"{TodayFocusMinutes} min";
+    public string TotalFocusText => $"{TotalFocusMinutes} min";
+    public string TotalSessionsText => TotalSessions.ToString();
+
     public PomodoroHistoryPage()
     {
         InitializeComponent();
@@ -39,7 +47,20 @@ public partial class PomodoroHistoryPage : ContentPage
         foreach (var item in data)
             Sessions.Add(item);
 
+        CalculateTodaySummary();
         RefreshBinding();
+    }
+
+    private void CalculateTodaySummary()
+    {
+        var todaySessions = Sessions
+            .Where(s => s.StartedAt.Date == DateTime.Today)
+            .ToList();
+
+        TodayFocusMinutes = todaySessions.Sum(s => s.FocusMinutes);
+
+        TotalFocusMinutes = Sessions.Sum(s => s.FocusMinutes);
+        TotalSessions = Sessions.Count;
     }
 
     private void OnSelectSessionClicked(object? sender, EventArgs e)

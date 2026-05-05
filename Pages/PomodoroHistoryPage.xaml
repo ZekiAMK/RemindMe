@@ -6,7 +6,7 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#0B2B14">
 
-  <Grid RowDefinitions="Auto,Auto,*"
+  <Grid RowDefinitions="Auto,Auto,Auto,*"
         Padding="20"
         RowSpacing="16">
 
@@ -28,7 +28,72 @@
 
     </VerticalStackLayout>
 
-    <Border Grid.Row="1"
+    <Grid Grid.Row="1"
+          ColumnDefinitions="*,*,*"
+          ColumnSpacing="10">
+
+      <Border BackgroundColor="#163D1D"
+              Stroke="#2E7D32"
+              StrokeThickness="1"
+              Padding="12">
+        <Border.StrokeShape>
+          <RoundRectangle CornerRadius="18"/>
+        </Border.StrokeShape>
+
+        <VerticalStackLayout Spacing="4">
+          <Label Text="Today Focus"
+                 TextColor="#DCECCF"
+                 FontSize="12"/>
+          <Label Text="{Binding TodayFocusText}"
+                 TextColor="White"
+                 FontSize="18"
+                 FontAttributes="Bold"/>
+        </VerticalStackLayout>
+      </Border>
+
+      <Border Grid.Column="1"
+              BackgroundColor="#163D1D"
+              Stroke="#2E7D32"
+              StrokeThickness="1"
+              Padding="12">
+        <Border.StrokeShape>
+          <RoundRectangle CornerRadius="18"/>
+        </Border.StrokeShape>
+
+        <VerticalStackLayout Spacing="4">
+          <Label Text="Total Focus"
+                 TextColor="#DCECCF"
+                 FontSize="12"/>
+          <Label Text="{Binding TotalFocusText}"
+                 TextColor="White"
+                 FontSize="18"
+                 FontAttributes="Bold"/>
+        </VerticalStackLayout>
+      </Border>
+
+      <Border Grid.Column="2"
+              BackgroundColor="#163D1D"
+              Stroke="#2E7D32"
+              StrokeThickness="1"
+              Padding="12">
+        <Border.StrokeShape>
+          <RoundRectangle CornerRadius="18"/>
+        </Border.StrokeShape>
+
+        <VerticalStackLayout Spacing="4">
+          <Label Text="Sessions"
+                 TextColor="#DCECCF"
+                 FontSize="12"/>
+          <Label Text="{Binding TotalSessionsText}"
+                 TextColor="White"
+                 FontSize="18"
+                 FontAttributes="Bold"/>
+        </VerticalStackLayout>
+      </Border>
+
+    </Grid>
+
+    <Border Grid.Row="2"
             IsVisible="{Binding IsSelectionMode}"
             BackgroundColor="#163D1D"
             Stroke="#2E7D32"
@@ -66,7 +131,7 @@
       </Grid>
     </Border>
 
-    <CollectionView Grid.Row="2"
+    <CollectionView Grid.Row="3"
                     ItemsSource="{Binding Sessions}"
                     SelectionMode="None">
 
