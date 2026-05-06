@@ -9,6 +9,11 @@ public partial class MainPage : ContentPage
 {
     private readonly DatabaseService _db;
 
+    private const string ReminderActionChangedKey = "ReminderActionChanged";
+    private long _lastReminderActionTick;
+    private IDispatcherTimer? _reminderRefreshTimer;
+    private bool _isCheckingReminderAction;
+
     private List<ReminderItem> AllReminders { get; set; } = new();
     public List<ReminderItem> Reminders { get; set; } = new();
 
@@ -49,12 +54,23 @@ public partial class MainPage : ContentPage
 
         string dbPath = Path.Combine(FileSystem.AppDataDirectory, "reminders.db");
         _db = new DatabaseService(dbPath);
+        _lastReminderActionTick = Preferences.Get(ReminderActionChangedKey, 0L);
+        SetupReminderRefreshTimer();
+
+        BindingContext = this;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         await LoadRemindersAsync();
+        _reminderRefreshTimer?.Start();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        _reminderRefreshTimer?.Stop();
     }
 
     private async Task LoadRemindersAsync()
@@ -157,8 +173,15 @@ public partial class MainPage : ContentPage
 
     private void RefreshBinding()
     {
-        BindingContext = null;
-        BindingContext = this;
+        OnPropertyChanged(nameof(ActiveFilter));
+        OnPropertyChanged(nameof(Reminders));
+        OnPropertyChanged(nameof(HasReminders));
+        OnPropertyChanged(nameof(HasNoReminders));
+        OnPropertyChanged(nameof(EmptyStateMessage));
+        OnPropertyChanged(nameof(IsSelectionMode));
+        OnPropertyChanged(nameof(SelectedCount));
+        OnPropertyChanged(nameof(SelectionPrimaryActionText));
+        OnPropertyChanged(nameof(SelectionPrimaryActionColor));
     }
 
     private async void OnReminderCardTapped(object? sender, TappedEventArgs e)
@@ -334,5 +357,45 @@ public partial class MainPage : ContentPage
 
         IsSelectionMode = false;
         await LoadRemindersAsync();
+    }
+
+    private void SetupReminderRefreshTimer()
+    {
+        _reminderRefreshTimer = Dispatcher.CreateTimer();
+        _reminderRefreshTimer.Interval = TimeSpan.FromSeconds(1);
+
+        _reminderRefreshTimer.Tick += async (s, e) =>
+        {
+            await CheckReminderActionChangeAsync();
+        };
+    }
+
+    private async Task CheckReminderActionChangeAsync()
+    {
+        if (_isCheckingReminderAction)
+            return;
+
+        _isCheckingReminderAction = true;
+
+        try
+        {
+            long latestTick = Preferences.Get(ReminderActionChangedKey, 0L);
+
+            if (latestTick != 0 && latestTick != _lastReminderActionTick)
+            {
+                _lastReminderActionTick = latestTick;
+
+                IsSelectionMode = false;
+
+                foreach (var reminder in AllReminders)
+                    reminder.IsSelected = false;
+
+                await LoadRemindersAsync();
+            }
+        }
+        finally
+        {
+            _isCheckingReminderAction = false;
+        }
     }
 }

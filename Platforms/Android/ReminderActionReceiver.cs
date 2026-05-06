@@ -2,12 +2,14 @@ using Android.App;
 using Android.Content;
 using RemindMe.Models;
 using SQLite;
+using Microsoft.Maui.Storage;
 
 namespace RemindMe.Services;
 
 [BroadcastReceiver(Enabled = true, Exported = false)]
 public class ReminderActionReceiver : BroadcastReceiver
 {
+    private const string ReminderActionChangedKey = "ReminderActionChanged";
     public override void OnReceive(Context? context, Intent? intent)
     {
         if (context == null || intent == null)
@@ -40,6 +42,7 @@ public class ReminderActionReceiver : BroadcastReceiver
 
             db.Update(reminder);
             manager?.Cancel(id);
+            Preferences.Set(ReminderActionChangedKey, DateTime.Now.Ticks);
         }
 
         if (action == "SNOOZE")
@@ -61,6 +64,7 @@ public class ReminderActionReceiver : BroadcastReceiver
                 newTime);
 
             manager?.Cancel(id);
+            Preferences.Set(ReminderActionChangedKey, DateTime.Now.Ticks);
         }
     }
 }

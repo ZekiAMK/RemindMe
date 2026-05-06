@@ -253,28 +253,35 @@
                                                                                               CommandParameter="{Binding .}"/>
                                                                 </VerticalStackLayout.GestureRecognizers>
 
-                                                                <Label Text="{Binding Title}"
-                                                                       FontSize="20"
-                                                                       FontAttributes="Bold"
-                                                                       TextColor="#0B2B14">
-                                                                        <Label.Triggers>
-                                                                                <DataTrigger TargetType="Label"
-                                                                                             Binding="{Binding IsPastDue}"
-                                                                                             Value="True">
-                                                                                        <Setter Property="TextColor"
-                                                                                                Value="#C62828"/>
-                                                                                </DataTrigger>
+                                                                <HorizontalStackLayout Spacing="6">
+                                                                        <Label Text="⭐"
+                                                                               FontSize="18"
+                                                                               IsVisible="{Binding ShowImportantIcon}"
+                                                                               VerticalOptions="Center"/>
 
-                                                                                <DataTrigger TargetType="Label"
-                                                                                             Binding="{Binding IsCompleted}"
-                                                                                             Value="True">
-                                                                                        <Setter Property="TextDecorations"
-                                                                                                Value="Strikethrough"/>
-                                                                                        <Setter Property="TextColor"
-                                                                                                Value="#6F6F6F"/>
-                                                                                </DataTrigger>
-                                                                        </Label.Triggers>
-                                                                </Label>
+                                                                        <Label Text="{Binding Title}"
+                                                                               FontSize="20"
+                                                                               FontAttributes="Bold"
+                                                                               TextColor="#0B2B14">
+                                                                                <Label.Triggers>
+                                                                                        <DataTrigger TargetType="Label"
+                                                                                                     Binding="{Binding IsPastDue}"
+                                                                                                     Value="True">
+                                                                                                <Setter Property="TextColor"
+                                                                                                        Value="#C62828"/>
+                                                                                        </DataTrigger>
+
+                                                                                        <DataTrigger TargetType="Label"
+                                                                                                     Binding="{Binding IsCompleted}"
+                                                                                                     Value="True">
+                                                                                                <Setter Property="TextDecorations"
+                                                                                                        Value="Strikethrough"/>
+                                                                                                <Setter Property="TextColor"
+                                                                                                        Value="#6F6F6F"/>
+                                                                                        </DataTrigger>
+                                                                                </Label.Triggers>
+                                                                        </Label>
+                                                                </HorizontalStackLayout>
 
                                                                 <Label Text="{Binding Description}"
                                                                        FontSize="14"

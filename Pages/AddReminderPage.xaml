@@ -7,144 +7,187 @@
              BackgroundColor="#0B2B14">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+        <VerticalStackLayout Padding="20"
+                             Spacing="20">
 
             <Label x:Name="PageTitle"
                    Text="Add Reminder"
                    FontSize="28"
                    FontAttributes="Bold"
                    TextColor="White"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center"/>
 
             <VerticalStackLayout Spacing="10">
-                <Label Text="Title" TextColor="White" FontSize="16" />
-                <Border Stroke="#2E7D32" StrokeThickness="1" BackgroundColor="White" Padding="10">
+                <Label Text="Title"
+                       TextColor="White"
+                       FontSize="16"/>
+                <Border Stroke="#2E7D32"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="10">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10" />
+                        <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
                     <Entry x:Name="TitleEntry"
                            Placeholder="Enter reminder title"
+                           PlaceholderColor="#0B2B14"
                            TextColor="Black"
-                           BackgroundColor="Transparent" />
+                           BackgroundColor="Transparent"/>
                 </Border>
             </VerticalStackLayout>
 
             <VerticalStackLayout Spacing="10">
-                <Label Text="Description" TextColor="White" FontSize="16" />
-                <Border Stroke="#2E7D32" StrokeThickness="1" BackgroundColor="White" Padding="10">
+                <Label Text="Description"
+                       TextColor="White"
+                       FontSize="16"/>
+                <Border Stroke="#2E7D32"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="10">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10" />
+                        <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
                     <Entry x:Name="DescriptionEntry"
                            Placeholder="Enter description"
+                           PlaceholderColor="#0B2B14"
                            TextColor="Black"
-                           BackgroundColor="Transparent" />
+                           BackgroundColor="Transparent"/>
                 </Border>
             </VerticalStackLayout>
 
-            <VerticalStackLayout x:Name="DateRow" Spacing="10" IsVisible="{Binding Source={x:Reference SetAlertSwitch}, Path=IsToggled}">
-                <Label Text="Date" TextColor="White" FontSize="16" />
-                <Border Stroke="#2E7D32" StrokeThickness="1" BackgroundColor="White" Padding="10">
+            <VerticalStackLayout x:Name="DateRow"
+                                 Spacing="10"
+                                 IsVisible="{Binding Source={x:Reference SetAlertSwitch}, Path=IsToggled}">
+                <Label Text="Date"
+                       TextColor="White"
+                       FontSize="16"/>
+                <Border Stroke="#2E7D32"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="10">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10" />
+                        <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
                     <DatePicker x:Name="ReminderDatePicker"
                                 TextColor="Black"
-                                BackgroundColor="Transparent" />
+                                BackgroundColor="Transparent"/>
                 </Border>
             </VerticalStackLayout>
 
-            <VerticalStackLayout x:Name="TimeRow" Spacing="10" IsVisible="{Binding Source={x:Reference SetAlertSwitch}, Path=IsToggled}">
-                <Label Text="Time" TextColor="White" FontSize="16" />
-                <Border Stroke="#2E7D32" StrokeThickness="1" BackgroundColor="White" Padding="10">
+            <VerticalStackLayout x:Name="TimeRow"
+                                 Spacing="10"
+                                 IsVisible="{Binding Source={x:Reference SetAlertSwitch}, Path=IsToggled}">
+                <Label Text="Time"
+                       TextColor="White"
+                       FontSize="16"/>
+                <Border Stroke="#2E7D32"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="10">
                     <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="10" />
+                        <RoundRectangle CornerRadius="10"/>
                     </Border.StrokeShape>
                     <TimePicker x:Name="ReminderTimePicker"
                                 TextColor="Black"
-                                BackgroundColor="Transparent" />
+                                BackgroundColor="Transparent"/>
                 </Border>
             </VerticalStackLayout>
 
-            <HorizontalStackLayout x:Name="ImportantRow" Spacing="20">
+            <HorizontalStackLayout x:Name="ImportantRow"
+                                   Spacing="20">
                 <Label Text="Important"
                        TextColor="White"
                        FontSize="16"
-                       VerticalOptions="Center" />
-                <Switch x:Name="ImportantSwitch" />
+                       VerticalOptions="Center"/>
+                <Switch x:Name="ImportantSwitch"/>
             </HorizontalStackLayout>
 
-            <HorizontalStackLayout x:Name="SetAlertRow" Spacing="20">
+            <HorizontalStackLayout x:Name="SetAlertRow"
+                                   Spacing="20">
                 <Label Text="Set alert"
                        TextColor="White"
                        FontSize="16"
-                       VerticalOptions="Center" />
-                <Switch x:Name="SetAlertSwitch" IsToggled="False" />
+                       VerticalOptions="Center"/>
+                <Switch x:Name="SetAlertSwitch"
+                        IsToggled="False"/>
             </HorizontalStackLayout>
 
-            <HorizontalStackLayout x:Name="ActionRow" Spacing="40" HorizontalOptions="Center" Margin="0,20,0,0">
+            <HorizontalStackLayout x:Name="ActionRow"
+                                   Spacing="40"
+                                   HorizontalOptions="Center"
+                                   Margin="0,20,0,0">
                 <!-- Save Action -->
-                <VerticalStackLayout x:Name="SaveAction" Spacing="4" HorizontalOptions="Center">
+                <VerticalStackLayout x:Name="SaveAction"
+                                     Spacing="4"
+                                     HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnSaveClicked" />
+                        <TapGestureRecognizer Tapped="OnSaveClicked"/>
                     </VerticalStackLayout.GestureRecognizers>
                     <Label Text="✓"
                            FontSize="24"
                            TextColor="#2E7D32"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center"/>
                     <Label Text="Save"
                            FontSize="14"
                            TextColor="#2E7D32"
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
                 <!-- Restore Action -->
-                <VerticalStackLayout x:Name="RestoreAction" Spacing="4" HorizontalOptions="Center" IsVisible="False">
+                <VerticalStackLayout x:Name="RestoreAction"
+                                     Spacing="4"
+                                     HorizontalOptions="Center"
+                                     IsVisible="False">
                     <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnRestoreClicked" />
+                        <TapGestureRecognizer Tapped="OnRestoreClicked"/>
                     </VerticalStackLayout.GestureRecognizers>
                     <Label Text="↩"
                            FontSize="24"
                            TextColor="#1976D2"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center"/>
                     <Label Text="Restore"
                            FontSize="14"
                            TextColor="#1976D2"
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
                 <!-- Delete Action -->
-                <VerticalStackLayout x:Name="DeleteAction" Spacing="4" HorizontalOptions="Center" IsVisible="False">
+                <VerticalStackLayout x:Name="DeleteAction"
+                                     Spacing="4"
+                                     HorizontalOptions="Center"
+                                     IsVisible="False">
                     <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnDeleteClicked" />
+                        <TapGestureRecognizer Tapped="OnDeleteClicked"/>
                     </VerticalStackLayout.GestureRecognizers>
                     <Label Text="🗑"
                            FontSize="24"
                            TextColor="#B71C1C"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center"/>
                     <Label Text="Delete"
                            FontSize="14"
                            TextColor="#B71C1C"
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
                 <!-- Cancel Action -->
-                <VerticalStackLayout x:Name="CancelAction" Spacing="4" HorizontalOptions="Center">
+                <VerticalStackLayout x:Name="CancelAction"
+                                     Spacing="4"
+                                     HorizontalOptions="Center">
                     <VerticalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnCancelClicked" />
+                        <TapGestureRecognizer Tapped="OnCancelClicked"/>
                     </VerticalStackLayout.GestureRecognizers>
                     <Label Text="✕"
                            FontSize="24"
                            TextColor="Gray"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center"/>
                     <Label Text="Cancel"
                            FontSize="14"
                            TextColor="Gray"
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
