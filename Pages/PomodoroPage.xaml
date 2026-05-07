@@ -68,7 +68,7 @@
                                    </VerticalStackLayout>
                             </Border>
 
-                            <Border BackgroundColor="White"
+                            <Border BackgroundColor="#DCECCF"
                                     Stroke="#2E7D32"
                                     StrokeThickness="1"
                                     Padding="18">
@@ -99,7 +99,7 @@
                                                         WidthRequest="80"
                                                         HorizontalTextAlignment="Center"
                                                         TextColor="#0B2B14"
-                                                        BackgroundColor="#EAF4EA"/>
+                                                        BackgroundColor="#F6FFF1"/>
 
                                                  <Label Grid.Row="1"
                                                         Text="Break minutes"
@@ -114,7 +114,7 @@
                                                         WidthRequest="80"
                                                         HorizontalTextAlignment="Center"
                                                         TextColor="#0B2B14"
-                                                        BackgroundColor="#EAF4EA"/>
+                                                        BackgroundColor="#F6FFF1"/>
 
                                           </Grid>
                                    </VerticalStackLayout>

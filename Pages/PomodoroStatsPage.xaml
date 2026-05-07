@@ -156,7 +156,7 @@
 
                         <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                        <Border BackgroundColor="White"
+                                        <Border BackgroundColor="#F4F8F1"
                                                 Opacity="{Binding CardOpacity}"
                                                 StrokeThickness="1"
                                                 Padding="16"
