@@ -13,6 +13,11 @@ public partial class AddReminderPage : ContentPage
         InitializeComponent();
         NavigationPage.SetHasNavigationBar(this, false);
         _reminderToEdit = null;
+
+        var defaultReminderTime = DateTime.Now.AddMinutes(1);
+
+        ReminderDatePicker.Date = defaultReminderTime.Date;
+        ReminderTimePicker.Time = defaultReminderTime.TimeOfDay;
     }
 
     public AddReminderPage(ReminderItem reminder)
