@@ -12,6 +12,8 @@ public partial class MainPage : ContentPage
     private const string ReminderActionChangedKey = "ReminderActionChanged";
     private long _lastReminderActionTick;
     private IDispatcherTimer? _reminderRefreshTimer;
+
+    public bool ShowStickySelectionBar { get; set; }
     private bool _isCheckingReminderAction;
 
     private List<ReminderItem> AllReminders { get; set; } = new();
@@ -22,6 +24,11 @@ public partial class MainPage : ContentPage
     public string ActiveFilter => _activeFilter;
 
     public bool HasNoReminders => Reminders.Count == 0;
+
+    public bool IsUndoVisible { get; set; }
+    public string UndoMessage { get; set; } = "";
+    private ReminderItem? _lastCompletedReminder;
+    private CancellationTokenSource? _undoCancellationTokenSource;
 
     public bool HasReminders => Reminders.Count > 0;
 
@@ -182,8 +189,21 @@ public partial class MainPage : ContentPage
         OnPropertyChanged(nameof(SelectedCount));
         OnPropertyChanged(nameof(SelectionPrimaryActionText));
         OnPropertyChanged(nameof(SelectionPrimaryActionColor));
+        OnPropertyChanged(nameof(ShowStickySelectionBar));
+        OnPropertyChanged(nameof(IsUndoVisible));
+        OnPropertyChanged(nameof(UndoMessage));
     }
 
+    private void OnMainScrollScrolled(object? sender, ScrolledEventArgs e)
+    {
+        bool shouldShow = IsSelectionMode && e.ScrollY > 360;
+
+        if (ShowStickySelectionBar == shouldShow)
+            return;
+
+        ShowStickySelectionBar = shouldShow;
+        OnPropertyChanged(nameof(ShowStickySelectionBar));
+    }
     private async void OnReminderCardTapped(object? sender, TappedEventArgs e)
     {
         if (e.Parameter is not ReminderItem reminder)
@@ -237,16 +257,39 @@ public partial class MainPage : ContentPage
             return;
         }
 
+        button.IsEnabled = false;
+
+        var oldText = button.Text;
+        var oldBackground = button.BackgroundColor;
+        var oldTextColor = button.TextColor;
+        var oldBorderColor = button.BorderColor;
+
         button.Text = "✓";
         button.BackgroundColor = Color.FromArgb("#2E7D32");
         button.TextColor = Colors.White;
         button.BorderColor = Colors.Transparent;
-        button.IsEnabled = false;
 
-        if (button.Parent is VerticalStackLayout stack && stack.Parent is Grid grid && grid.Parent is Border card)
+        if (button.Parent is VerticalStackLayout stack &&
+            stack.Parent is Grid grid &&
+            grid.Parent is Border card)
         {
-            await card.FadeToAsync(0, 300);
+            double originalHeight = card.Height;
+
+            await Task.WhenAll(
+                card.FadeTo(0, 350),
+                card.HeightRequestToAsync(0, 350)
+            );
+
+            card.HeightRequest = originalHeight;
+            card.Opacity = 1;
         }
+
+        // IMPORTANT: reset recycled button before refreshing list
+        button.Text = oldText;
+        button.BackgroundColor = oldBackground;
+        button.TextColor = oldTextColor;
+        button.BorderColor = oldBorderColor;
+        button.IsEnabled = true;
 
         await NotificationService.CancelNotification(reminder.Id);
 
@@ -255,7 +298,68 @@ public partial class MainPage : ContentPage
 
         await _db.SaveReminderAsync(reminder);
 
+        Reminders = Reminders
+            .Where(r => r.Id != reminder.Id)
+            .ToList();
+
+        RefreshBinding();
+
+        _ = ShowUndoCompleteAsync(reminder);
+
         await Task.Delay(300);
+        await LoadRemindersAsync();
+    }
+
+    private async Task ShowUndoCompleteAsync(ReminderItem reminder)
+    {
+        _undoCancellationTokenSource?.Cancel();
+        _undoCancellationTokenSource = new CancellationTokenSource();
+
+        _lastCompletedReminder = reminder;
+        UndoMessage = "Reminder completed";
+        IsUndoVisible = true;
+        RefreshBinding();
+
+        try
+        {
+            await Task.Delay(3000, _undoCancellationTokenSource.Token);
+
+            IsUndoVisible = false;
+            _lastCompletedReminder = null;
+            RefreshBinding();
+        }
+        catch (TaskCanceledException)
+        {
+            // Undo was clicked or another reminder was completed.
+        }
+    }
+
+    private async void OnUndoCompleteClicked(object? sender, EventArgs e)
+    {
+        if (_lastCompletedReminder == null)
+            return;
+
+        _undoCancellationTokenSource?.Cancel();
+
+        var reminder = _lastCompletedReminder;
+
+        reminder.IsCompleted = false;
+        reminder.IsSelected = false;
+
+        await _db.SaveReminderAsync(reminder);
+
+        if (reminder.HasAlert && reminder.ReminderTime.HasValue)
+        {
+            await NotificationService.ScheduleNotification(
+                reminder.Id,
+                reminder.Title,
+                reminder.Description,
+                reminder.ReminderTime.Value);
+        }
+
+        IsUndoVisible = false;
+        _lastCompletedReminder = null;
+
         await LoadRemindersAsync();
     }
 
@@ -397,5 +501,27 @@ public partial class MainPage : ContentPage
         {
             _isCheckingReminderAction = false;
         }
+    }
+}
+
+public static class ViewAnimationExtensions
+{
+    public static Task<bool> HeightRequestToAsync(this VisualElement view, double height, uint length)
+    {
+        var tcs = new TaskCompletionSource<bool>();
+
+        var animation = new Animation(
+            callback: value => view.HeightRequest = value,
+            start: view.Height,
+            end: height);
+
+        animation.Commit(
+            owner: view,
+            name: "HeightRequestTo",
+            length: length,
+            easing: Easing.CubicInOut,
+            finished: (value, cancelled) => tcs.SetResult(!cancelled));
+
+        return tcs.Task;
     }
 }
