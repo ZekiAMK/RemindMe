@@ -6,200 +6,194 @@
              Shell.NavBarIsVisible="False"
              BackgroundColor="#0B2B14">
 
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*"
-              Padding="20"
-              RowSpacing="18">
+        <ScrollView>
+                <VerticalStackLayout Padding="20"
+                                     Spacing="18">
 
-                <Button Text="← Back"
-                        Clicked="OnBackClicked"
-                        BackgroundColor="Transparent"
-                        TextColor="#DCECCF"
-                        FontSize="18"
-                        Padding="0"
-                        HorizontalOptions="Start"/>
+                        <Button Text="← Back"
+                                Clicked="OnBackClicked"
+                                BackgroundColor="Transparent"
+                                TextColor="#DCECCF"
+                                FontSize="18"
+                                Padding="0"
+                                HorizontalOptions="Start"/>
 
-                <VerticalStackLayout Grid.Row="1"
-                                     Spacing="6">
-                        <Label Text="Statistics"
-                               FontSize="34"
-                               TextColor="White"
-                               FontAttributes="Bold"/>
-
-                        <Label Text="{Binding RangeText}"
-                               TextColor="White"
-                               FontSize="16"
-                               FontAttributes="Bold"/>
-
-                        <Label Text="{Binding SummaryText}"
-                               TextColor="#DCECCF"
-                               FontSize="15"/>
-                </VerticalStackLayout>
-
-                <ScrollView Grid.Row="2"
-                            Orientation="Horizontal"
-                            HorizontalScrollBarVisibility="Never">
-                        <HorizontalStackLayout Spacing="10">
-
-                                <Button Text="1W"
-                                        Clicked="On1Week"
-                                        BackgroundColor="{Binding OneWeekColor}"
-                                        TextColor="White"
-                                        CornerRadius="18"/>
-
-                                <Button Text="3W"
-                                        Clicked="On3Week"
-                                        BackgroundColor="{Binding ThreeWeekColor}"
-                                        TextColor="White"
-                                        CornerRadius="18"/>
-
-                                <Button Text="1M"
-                                        Clicked="On1Month"
-                                        BackgroundColor="{Binding OneMonthColor}"
-                                        TextColor="White"
-                                        CornerRadius="18"/>
-
-                                <Button Text="3M"
-                                        Clicked="On3Month"
-                                        BackgroundColor="{Binding ThreeMonthColor}"
-                                        TextColor="White"
-                                        CornerRadius="18"/>
-
-                                <Button Text="6M"
-                                        Clicked="On6Month"
-                                        BackgroundColor="{Binding SixMonthColor}"
-                                        TextColor="White"
-                                        CornerRadius="18"/>
-
-                                <Button Text="1Y"
-                                        Clicked="On1Year"
-                                        BackgroundColor="{Binding OneYearColor}"
-                                        TextColor="White"
-                                        CornerRadius="18"/>
-
-                        </HorizontalStackLayout>
-                </ScrollView>
-
-                <Grid Grid.Row="3"
-                      ColumnDefinitions="*,*"
-                      ColumnSpacing="12">
-
-                        <Border BackgroundColor="#163D1D"
-                                Stroke="#2E7D32"
-                                StrokeThickness="1"
-                                Padding="14">
-                                <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="20"/>
-                                </Border.StrokeShape>
-
-                                <VerticalStackLayout Spacing="4">
-                                        <Label Text="🔥 Current Streak"
-                                               TextColor="#DCECCF"
-                                               FontSize="13"/>
-
-                                        <Label Text="{Binding CurrentStreakText}"
-                                               TextColor="White"
-                                               FontSize="22"
-                                               FontAttributes="Bold"/>
-                                </VerticalStackLayout>
-                        </Border>
-
-                        <Border Grid.Column="1"
-                                BackgroundColor="#163D1D"
-                                Stroke="#2E7D32"
-                                StrokeThickness="1"
-                                Padding="14">
-                                <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="20"/>
-                                </Border.StrokeShape>
-
-                                <VerticalStackLayout Spacing="4">
-                                        <Label Text="🏆 Best Streak"
-                                               TextColor="#DCECCF"
-                                               FontSize="13"/>
-
-                                        <Label Text="{Binding BestStreakText}"
-                                               TextColor="White"
-                                               FontSize="22"
-                                               FontAttributes="Bold"/>
-                                </VerticalStackLayout>
-                        </Border>
-
-                </Grid>
-
-                <Border Grid.Row="4"
-                        BackgroundColor="White"
-                        Stroke="#2E7D32"
-                        StrokeThickness="1"
-                        Padding="16"
-                        Margin="0,0,0,4">
-
-                        <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="22"/>
-                        </Border.StrokeShape>
-
-                        <VerticalStackLayout Spacing="10">
-
-                                <Label Text="Focus Chart"
-                                       TextColor="#0B2B14"
-                                       FontSize="18"
+                        <VerticalStackLayout Spacing="6">
+                                <Label Text="Statistics"
+                                       FontSize="34"
+                                       TextColor="White"
                                        FontAttributes="Bold"/>
 
-                                <GraphicsView x:Name="ChartCanvas"
-                                              HeightRequest="180"/>
+                                <Label Text="{Binding RangeText}"
+                                       TextColor="White"
+                                       FontSize="16"
+                                       FontAttributes="Bold"/>
+
+                                <Label Text="{Binding SummaryText}"
+                                       TextColor="#DCECCF"
+                                       FontSize="15"/>
+                        </VerticalStackLayout>
+
+                        <ScrollView Orientation="Horizontal"
+                                    HorizontalScrollBarVisibility="Never">
+                                <HorizontalStackLayout Spacing="10">
+
+                                        <Button Text="1W"
+                                                Clicked="On1Week"
+                                                BackgroundColor="{Binding OneWeekColor}"
+                                                TextColor="White"
+                                                CornerRadius="18"/>
+
+                                        <Button Text="3W"
+                                                Clicked="On3Week"
+                                                BackgroundColor="{Binding ThreeWeekColor}"
+                                                TextColor="White"
+                                                CornerRadius="18"/>
+
+                                        <Button Text="1M"
+                                                Clicked="On1Month"
+                                                BackgroundColor="{Binding OneMonthColor}"
+                                                TextColor="White"
+                                                CornerRadius="18"/>
+
+                                        <Button Text="3M"
+                                                Clicked="On3Month"
+                                                BackgroundColor="{Binding ThreeMonthColor}"
+                                                TextColor="White"
+                                                CornerRadius="18"/>
+
+                                        <Button Text="6M"
+                                                Clicked="On6Month"
+                                                BackgroundColor="{Binding SixMonthColor}"
+                                                TextColor="White"
+                                                CornerRadius="18"/>
+
+                                        <Button Text="1Y"
+                                                Clicked="On1Year"
+                                                BackgroundColor="{Binding OneYearColor}"
+                                                TextColor="White"
+                                                CornerRadius="18"/>
+
+                                </HorizontalStackLayout>
+                        </ScrollView>
+
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="12">
+
+                                <Border BackgroundColor="#163D1D"
+                                        Stroke="#2E7D32"
+                                        StrokeThickness="1"
+                                        Padding="14">
+                                        <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="20"/>
+                                        </Border.StrokeShape>
+
+                                        <VerticalStackLayout Spacing="4">
+                                                <Label Text="🔥 Current Streak"
+                                                       TextColor="#DCECCF"
+                                                       FontSize="13"/>
+
+                                                <Label Text="{Binding CurrentStreakText}"
+                                                       TextColor="White"
+                                                       FontSize="22"
+                                                       FontAttributes="Bold"/>
+                                        </VerticalStackLayout>
+                                </Border>
+
+                                <Border Grid.Column="1"
+                                        BackgroundColor="#163D1D"
+                                        Stroke="#2E7D32"
+                                        StrokeThickness="1"
+                                        Padding="14">
+                                        <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="20"/>
+                                        </Border.StrokeShape>
+
+                                        <VerticalStackLayout Spacing="4">
+                                                <Label Text="🏆 Best Streak"
+                                                       TextColor="#DCECCF"
+                                                       FontSize="13"/>
+
+                                                <Label Text="{Binding BestStreakText}"
+                                                       TextColor="White"
+                                                       FontSize="22"
+                                                       FontAttributes="Bold"/>
+                                        </VerticalStackLayout>
+                                </Border>
+
+                        </Grid>
+
+                        <Border BackgroundColor="White"
+                                Stroke="#2E7D32"
+                                StrokeThickness="1"
+                                Padding="16"
+                                Margin="0,0,0,4">
+                                <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="22"/>
+                                </Border.StrokeShape>
+
+                                <VerticalStackLayout Spacing="10">
+                                        <Label Text="Focus Chart"
+                                               TextColor="#0B2B14"
+                                               FontSize="18"
+                                               FontAttributes="Bold"/>
+
+                                        <GraphicsView x:Name="ChartCanvas"
+                                                      HeightRequest="180"/>
+                                </VerticalStackLayout>
+                        </Border>
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding DailyStats}"
+                                             Spacing="0">
+
+                                <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                                <Border BackgroundColor="#F4F8F1"
+                                                        Opacity="{Binding CardOpacity}"
+                                                        StrokeThickness="1"
+                                                        Padding="16"
+                                                        Margin="0,0,0,14">
+
+                                                        <Border.StrokeShape>
+                                                                <RoundRectangle CornerRadius="20"/>
+                                                        </Border.StrokeShape>
+
+                                                        <VerticalStackLayout Spacing="10">
+
+                                                                <Grid ColumnDefinitions="*,Auto">
+                                                                        <Label Text="{Binding DateLabel}"
+                                                                               TextColor="#0B2B14"
+                                                                               FontSize="17"
+                                                                               FontAttributes="Bold"/>
+
+                                                                        <Label Grid.Column="1"
+                                                                               Text="{Binding FocusText}"
+                                                                               TextColor="#2E7D32"
+                                                                               FontSize="16"
+                                                                               FontAttributes="Bold"/>
+                                                                </Grid>
+
+                                                                <Grid ColumnDefinitions="*,Auto">
+                                                                        <ProgressBar Progress="{Binding Progress}"
+                                                                                     ProgressColor="#2E7D32"
+                                                                                     BackgroundColor="#DCECCF"
+                                                                                     HeightRequest="10"
+                                                                                     VerticalOptions="Center"/>
+
+                                                                        <Label Grid.Column="1"
+                                                                               Text="{Binding SessionsText}"
+                                                                               TextColor="#5F6E63"
+                                                                               FontSize="13"
+                                                                               Margin="12,0,0,0"/>
+                                                                </Grid>
+
+                                                        </VerticalStackLayout>
+                                                </Border>
+                                        </DataTemplate>
+                                </BindableLayout.ItemTemplate>
 
                         </VerticalStackLayout>
-                </Border>
 
-                <CollectionView Grid.Row="5"
-                                ItemsSource="{Binding DailyStats}"
-                                SelectionMode="None">
-
-                        <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                        <Border BackgroundColor="#F4F8F1"
-                                                Opacity="{Binding CardOpacity}"
-                                                StrokeThickness="1"
-                                                Padding="16"
-                                                Margin="0,0,0,14">
-
-                                                <Border.StrokeShape>
-                                                        <RoundRectangle CornerRadius="20"/>
-                                                </Border.StrokeShape>
-
-                                                <VerticalStackLayout Spacing="10">
-
-                                                        <Grid ColumnDefinitions="*,Auto">
-                                                                <Label Text="{Binding DateLabel}"
-                                                                       TextColor="#0B2B14"
-                                                                       FontSize="17"
-                                                                       FontAttributes="Bold"/>
-
-                                                                <Label Grid.Column="1"
-                                                                       Text="{Binding FocusText}"
-                                                                       TextColor="#2E7D32"
-                                                                       FontSize="16"
-                                                                       FontAttributes="Bold"/>
-                                                        </Grid>
-
-                                                        <Grid ColumnDefinitions="*,Auto">
-                                                                <ProgressBar Progress="{Binding Progress}"
-                                                                             ProgressColor="#2E7D32"
-                                                                             BackgroundColor="#DCECCF"
-                                                                             HeightRequest="10"
-                                                                             VerticalOptions="Center"/>
-
-                                                                <Label Grid.Column="1"
-                                                                       Text="{Binding SessionsText}"
-                                                                       TextColor="#5F6E63"
-                                                                       FontSize="13"
-                                                                       Margin="12,0,0,0"/>
-                                                        </Grid>
-
-                                                </VerticalStackLayout>
-                                        </Border>
-                                </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                </CollectionView>
-
-        </Grid>
+                </VerticalStackLayout>
+        </ScrollView>
 </ContentPage>
