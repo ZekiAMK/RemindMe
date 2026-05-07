@@ -10,19 +10,31 @@
         <Grid>
                 <ScrollView x:Name="MainScrollView"
                             Scrolled="OnMainScrollScrolled">
-                        <VerticalStackLayout Padding="20"
-                                             Spacing="20">
+                        <VerticalStackLayout Padding="18,6,20,20"
+                                             Spacing="14">
 
-                                <Label Text="RemindMe"
-                                       FontSize="32"
-                                       FontAttributes="Bold"
-                                       TextColor="White"
-                                       HorizontalOptions="Center"/>
+                                <Grid ColumnDefinitions="Auto,*"
+                                      HeightRequest="34"
+                                      Margin="-8,8,0,-6">
+
+                                        <Button Text="ⓘ"
+                                                Clicked="OnAboutClicked"
+                                                BackgroundColor="Transparent"
+                                                TextColor="#DCECCF"
+                                                FontSize="25"
+                                                Padding="0"
+                                                WidthRequest="42"
+                                                HeightRequest="42"
+                                                HorizontalOptions="Start"
+                                                VerticalOptions="Center"/>
+                                </Grid>
 
                                 <Label Text="Your daily reminders"
-                                       FontSize="16"
-                                       TextColor="#DCECCF"
-                                       HorizontalOptions="Center"/>
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="White"
+                                       HorizontalOptions="Center"
+                                       Margin="0,-4,0,2"/>
 
                                 <Button Text="+ Add Reminder"
                                         Clicked="OnAddReminderClicked"

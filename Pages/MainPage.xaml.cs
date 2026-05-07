@@ -413,6 +413,11 @@ public partial class MainPage : ContentPage
             EnterSelectionMode(reminder);
     }
 
+    private async void OnAboutClicked(object? sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new AboutPage());
+    }
+
     private void ToggleSelection(ReminderItem reminder)
     {
         reminder.IsSelected = !reminder.IsSelected;

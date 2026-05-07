@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RemindMe.Pages.AboutPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#0B2B14">
+
+  <ScrollView>
+
+    <VerticalStackLayout Padding="28,20,28,28"
+                         Spacing="22">
+
+      <Label Text="← Back"
+             FontSize="18"
+             TextColor="#DCECCF">
+
+        <Label.GestureRecognizers>
+          <TapGestureRecognizer Tapped="OnBackTapped"/>
+        </Label.GestureRecognizers>
+
+      </Label>
+
+      <VerticalStackLayout Spacing="12"
+                           HorizontalOptions="Center">
+
+        <Label Text="RemindMe"
+               FontSize="34"
+               FontAttributes="Bold"
+               TextColor="White"
+               HorizontalOptions="Center"/>
+
+        <Label Text="Version 1.0"
+               FontSize="15"
+               TextColor="#DCECCF"
+               HorizontalOptions="Center"/>
+
+        <Label Text="A productivity and reminder app."
+               FontSize="16"
+               TextColor="#DCECCF"
+               HorizontalTextAlignment="Center"
+               MaximumWidthRequest="320"/>
+      </VerticalStackLayout>
+
+      <Border BackgroundColor="#163D1D"
+              Stroke="#2E7D32"
+              StrokeThickness="1"
+              Padding="20">
+
+        <Border.StrokeShape>
+          <RoundRectangle CornerRadius="22"/>
+        </Border.StrokeShape>
+
+        <VerticalStackLayout Spacing="16">
+
+          <Label Text="Created by"
+                 FontSize="15"
+                 TextColor="#9DB59F"
+                 HorizontalOptions="Center"/>
+
+          <Label Text="Zeki Kenan Köseoğlu"
+                 FontSize="18"
+                 FontAttributes="Bold"
+                 TextColor="White"
+                 HorizontalOptions="Center"/>
+
+        </VerticalStackLayout>
+
+      </Border>
+
+    </VerticalStackLayout>
+
+  </ScrollView>
+
+</ContentPage>
