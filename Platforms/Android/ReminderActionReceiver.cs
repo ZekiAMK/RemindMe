@@ -9,6 +9,8 @@ namespace RemindMe.Services;
 [BroadcastReceiver(Enabled = true, Exported = false)]
 public class ReminderActionReceiver : BroadcastReceiver
 {
+    private const string LastCompletedReminderIdKey = "LastCompletedReminderId";
+    private const string LastReminderActionTypeKey = "LastReminderActionType";
     private const string ReminderActionChangedKey = "ReminderActionChanged";
     public override void OnReceive(Context? context, Intent? intent)
     {
@@ -42,6 +44,9 @@ public class ReminderActionReceiver : BroadcastReceiver
 
             db.Update(reminder);
             manager?.Cancel(id);
+
+            Preferences.Set(LastCompletedReminderIdKey, id);
+            Preferences.Set(LastReminderActionTypeKey, "COMPLETE");
             Preferences.Set(ReminderActionChangedKey, DateTime.Now.Ticks);
         }
 
@@ -64,6 +69,7 @@ public class ReminderActionReceiver : BroadcastReceiver
                 newTime);
 
             manager?.Cancel(id);
+            Preferences.Set(LastReminderActionTypeKey, "SNOOZE");
             Preferences.Set(ReminderActionChangedKey, DateTime.Now.Ticks);
         }
     }

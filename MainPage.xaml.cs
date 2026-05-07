@@ -10,6 +10,8 @@ public partial class MainPage : ContentPage
     private readonly DatabaseService _db;
 
     private const string ReminderActionChangedKey = "ReminderActionChanged";
+    private const string LastCompletedReminderIdKey = "LastCompletedReminderId";
+    private const string LastReminderActionTypeKey = "LastReminderActionType";
     private long _lastReminderActionTick;
     private IDispatcherTimer? _reminderRefreshTimer;
 
@@ -494,7 +496,23 @@ public partial class MainPage : ContentPage
                 foreach (var reminder in AllReminders)
                     reminder.IsSelected = false;
 
-                await LoadRemindersAsync();
+                string actionType = Preferences.Get(LastReminderActionTypeKey, "");
+
+                if (actionType == "COMPLETE")
+                {
+                    int completedId = Preferences.Get(LastCompletedReminderIdKey, -1);
+
+                    var completedReminder = AllReminders.FirstOrDefault(r => r.Id == completedId);
+
+                    await LoadRemindersAsync();
+
+                    if (completedReminder != null)
+                        _ = ShowUndoCompleteAsync(completedReminder);
+                }
+                else
+                {
+                    await LoadRemindersAsync();
+                }
             }
         }
         finally
