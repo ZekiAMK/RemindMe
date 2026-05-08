@@ -47,25 +47,14 @@ This project was developed as a personal portfolio project to improve mobile dev
 
 ---
 
-# Screenshots
+# Screen Recording
 
 ## Home Page
-
-![alt text](image.png)
-
 ## Add Reminder Page
-
-![alt text](image-1.png)
-
 ## Pomodoro Page
-
-![alt text](image-2.png)
-![alt text](image-3.png)
-![alt text](image-4.png)
-
 ## About Page
 
-![alt text](image-5.png)
+https://github.com/user-attachments/assets/2f0c756e-3a2d-4b73-98b1-a0e52f0312a2
 
 ---
 
