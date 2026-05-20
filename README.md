@@ -78,3 +78,15 @@ Services/
 Resources/
 Platforms/
 ```
+
+---
+
+# Developer
+
+Developed by Zeki Kenan Köseoğlu.
+
+---
+
+# License
+
+This project is licensed under the MIT License.
