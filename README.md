@@ -81,6 +81,18 @@ Platforms/
 
 ---
 
+# Future Plans
+
+- Multi-language support
+- Recurring reminders
+- Calendar integration
+- Advanced productivity statistics
+- Custom notification sounds
+- Cross-device synchronization
+- Desktop support improvements
+
+---
+
 # Developer
 
 Developed by Zeki Kenan Köseoğlu.
